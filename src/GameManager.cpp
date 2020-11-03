@@ -29,7 +29,7 @@ void GameManager::Init()
     Input::Init();
 
     m_Track = new Track();
-    m_Car = new Car(m_Track, Point({64, 32, 0}), Rotation().FromEulerAngles(0, 0, -DEG_TO_RAD * 90));
+    m_Car = new Car(Point({64, 32, 0}), Rotation().FromEulerAngles(0, 0, -DEG_TO_RAD * 90));
 }
 
 void GameManager::Update()
@@ -42,6 +42,8 @@ void GameManager::Update()
     // update the game objects
     m_Car->Update(dt);
     m_Track->Update(dt);
+
+    // scroll the screen
 }
 
 void GameManager::Draw()

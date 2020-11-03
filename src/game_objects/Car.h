@@ -9,9 +9,9 @@
 class Car
 {
 public:
-    Car(Track* track);
-    Car(Track* track, Point position, Point direction);
-    Car(Track* track, Point position, Rotation rot);
+    Car();
+    Car(Point position, Point direction);
+    Car(Point position, Rotation rot);
     ~Car();
 
     inline void SetPosition(Point position) { m_Position = position; }
@@ -27,8 +27,6 @@ private:
     void Init();
 
 private:
-    Track* m_Track;
-
     float m_TopSpeed = 25;
     float m_Acceleration = 5;
 

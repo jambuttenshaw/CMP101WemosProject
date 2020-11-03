@@ -5,20 +5,20 @@
 
 #include <Streaming.h>
 
-Car::Car(Track* track)
-    : m_Track(track), m_Position(Point()), m_Direction(Point({0, 0, 1}))
+Car::Car()
+    : m_Position(Point()), m_Direction(Point({0, 0, 1}))
 {
     Init();
 }
 
-Car::Car(Track* track, Point position, Point direction)
-    : m_Track(track), m_Position(position), m_Direction(direction)
+Car::Car(Point position, Point direction)
+    : m_Position(position), m_Direction(direction)
 {
     Init();
 }
 
-Car::Car(Track* track, Point position, Rotation rot)
-    : m_Track(track), m_Position(position)
+Car::Car(Point position, Rotation rot)
+    : m_Position(position)
 {
     SetDirection(rot);
 
