@@ -48,10 +48,14 @@ void Car::Update(Timestep ts)
     // CAR MOTION
     
     // update position
+    // s = u * t + 1/2 * a * t * t
+    // newPos is the distance travelled this frame
+    Point newPos = m_Velocity * ts + m_Acceleration * 0.5f * ts * ts;
+    m_Position += newPos;
 
     // update velocity
-
-    // update acceleration
+    // v = u + a * t
+    m_Velocity = m_Direction * 7;
 
 }
 
