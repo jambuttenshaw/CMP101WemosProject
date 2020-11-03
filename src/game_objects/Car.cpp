@@ -34,6 +34,7 @@ void Car::Init()
 {
     // set the velocity and acceleration to 0 vectors
     m_Velocity = Point();
+    m_InitialPos = m_Position;
 }
 
 void Car::Update(Timestep ts)

@@ -46,12 +46,18 @@ void GameManager::Update()
     m_Track->Update(dt);
 
     // scroll the screen
+    Point translation = -m_Car->GetDisplacement();
+    m_Car->Translate(translation);
+    m_Track->Translate(translation);
 
+
+    /* ------------ WIP ----------------
     // rotate the screen
     Rotation rot = m_Car->GetInverseRotation();
     // rotating car by the inverse of its rotation will rotate it back to where it started
     m_Car->SetDirection(m_DefaultCarRotation);
     m_Track->SetRotation(rot);
+    */
 }
 
 void GameManager::Draw()
