@@ -7,8 +7,6 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
-    delete m_Display;
-    
     delete m_Car;
     delete m_Track;
 }
