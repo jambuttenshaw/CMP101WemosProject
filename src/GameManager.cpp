@@ -32,8 +32,8 @@ void GameManager::Update()
 {
     // get delta time
     unsigned long newTime = millis();
-    Timestep dt((float)(newTime - m_TotalTime) / 1000.0f);
-    m_TotalTime += newTime;
+    Timestep dt((float)(newTime - m_LastFrameTime) / 1000.0f);
+    m_LastFrameTime = newTime;
 
     // update the game objects
     m_Car->Update(dt);

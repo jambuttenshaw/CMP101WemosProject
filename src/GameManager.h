@@ -19,7 +19,7 @@ public:
     void Update();
     void Draw();
 private:
-    unsigned long m_TotalTime;
+    unsigned long m_LastFrameTime = 0UL;
 
     Adafruit_SSD1306* m_Display;
 

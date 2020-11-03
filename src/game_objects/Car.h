@@ -17,14 +17,17 @@ public:
     void SetDirection(Rotation rot);
 
     inline Point GetPosition() { return m_Position; }
-    // inline Rotation GetRotation() { return m_Direction; }
     inline Point GetDirection() { return m_Direction; }
 
     void Update(Timestep ts);
     void Draw(Adafruit_SSD1306& display);
+private:
+    void Init();
 
 private:
     Point m_Position;
+    Point m_Velocity;
+    Point m_Acceleration;
     // unit vector representing the direction the car is facing
     Point m_Direction;
 

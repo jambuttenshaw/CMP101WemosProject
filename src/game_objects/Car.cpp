@@ -5,24 +5,33 @@
 Car::Car()
     : m_Position(Point()), m_Direction(Point({0, 0, 1}))
 {
-
+    Init();
 }
 
 Car::Car(Point position, Point direction)
     : m_Position(position), m_Direction(direction)
 {
-
+    Init();
 }
 
 Car::Car(Point position, Rotation rot)
     : m_Position(position)
 {
     SetDirection(rot);
+
+    Init();
 }
 
 Car::~Car()
 {
 
+}
+
+void Car::Init()
+{
+    // set the velocity and acceleration to 0 vectors
+    m_Velocity = Point();
+    m_Acceleration = Point();
 }
 
 void Car::Update(Timestep ts)
@@ -54,7 +63,7 @@ void Car::Draw(Adafruit_SSD1306& display)
     int endX = posX + (int)(m_ViewLineLength * m_Direction.X());
     int endY = posY + (int)(m_ViewLineLength * m_Direction.Y());
 
-    display.drawLine(posX, posY, endX, endY, 1);
+    display.drawLine(posX, posY, endX, endY, WHITE);
 }
 
 void Car::SetDirection(Rotation rot)
