@@ -9,6 +9,9 @@ public:
     Car(const glm::vec2& position, const glm::vec2& direction);
     ~Car();
 
+    void Update();
+    void Draw();
+
     inline const glm::vec2& GetPosition() const { return m_Position; }
     inline const glm::vec2& GetDirection() const { return m_Direction; }
 

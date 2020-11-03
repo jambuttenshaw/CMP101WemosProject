@@ -16,3 +16,13 @@ Car::~Car()
 {
 
 }
+
+void Car::Update()
+{
+
+}
+
+void Car::Draw()
+{
+    
+}
