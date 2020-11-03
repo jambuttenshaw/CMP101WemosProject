@@ -15,11 +15,13 @@ public:
     ~Car();
 
     inline void SetPosition(Point position) { m_Position = position; }
+
     void SetDirection(Rotation rot);
 
     inline Point GetPosition() { return m_Position; }
     inline Point GetDirection() { return m_Direction; }
     inline Rotation GetRotation() { return Rotation().FromEulerAngles(0, 0, atanf(m_Direction.Y() / m_Direction.X())); }
+    inline Rotation GetInverseRotation() { return GetRotation().Inverse(); }
 
     void Update(Timestep ts);
     void Draw(Adafruit_SSD1306& display);

@@ -29,7 +29,9 @@ void GameManager::Init()
     Input::Init();
 
     m_Track = new Track();
-    m_Car = new Car(Point({64, 32, 0}), Rotation().FromEulerAngles(0, 0, -DEG_TO_RAD * 90));
+
+    m_DefaultCarRotation = Rotation().FromEulerAngles(0, 0, -DEG_TO_RAD * 90);
+    m_Car = new Car(Point({64, 32, 0}), m_DefaultCarRotation);
 }
 
 void GameManager::Update()
@@ -44,6 +46,12 @@ void GameManager::Update()
     m_Track->Update(dt);
 
     // scroll the screen
+
+    // rotate the screen
+    Rotation rot = m_Car->GetInverseRotation();
+    // rotating car by the inverse of its rotation will rotate it back to where it started
+    m_Car->SetDirection(m_DefaultCarRotation);
+    m_Track->SetRotation(rot);
 }
 
 void GameManager::Draw()

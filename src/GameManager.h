@@ -25,4 +25,6 @@ private:
 
     Car* m_Car;
     Track* m_Track;
+
+    Rotation m_DefaultCarRotation;
 };
