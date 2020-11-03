@@ -7,7 +7,8 @@ class Car
 {
 public:
     Car();
-    Car(Point position, Rotation direction);
+    Car(Point position, Point direction);
+    Car(Point position, Rotation rot);
     ~Car();
 
     inline void SetPosition(Point position) { m_Position = position; }
