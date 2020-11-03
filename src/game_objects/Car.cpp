@@ -25,7 +25,7 @@ Car::~Car()
 
 }
 
-void Car::Update()
+void Car::Update(Timestep ts)
 {
     // get the raw analogue input
     int rawInput = Input::GetAnalogueIn();

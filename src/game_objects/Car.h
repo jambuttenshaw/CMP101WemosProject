@@ -1,5 +1,7 @@
 #pragma once
 
+#include "core/Timestep.h"
+
 #include <Adafruit_SSD1306.h>
 #include <Geometry.h>
 
@@ -18,7 +20,7 @@ public:
     // inline Rotation GetRotation() { return m_Direction; }
     inline Point GetDirection() { return m_Direction; }
 
-    void Update();
+    void Update(Timestep ts);
     void Draw(Adafruit_SSD1306& display);
 
 private:

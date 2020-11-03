@@ -19,6 +19,8 @@ public:
     void Update();
     void Draw();
 private:
+    unsigned long m_TotalTime;
+
     Adafruit_SSD1306* m_Display;
 
     Car* m_Car;
