@@ -12,6 +12,15 @@ Track::Track()
     m_TrackEdgeIndices[1] = 2;
     m_TrackEdgeIndices[2] = 1;
     m_TrackEdgeIndices[3] = 3;
+
+    // ----
+    m_TrackAreaIndices[0] = 0;
+    m_TrackAreaIndices[1] = 2;
+    m_TrackAreaIndices[2] = 1;
+
+    m_TrackAreaIndices[3] = 0;
+    m_TrackAreaIndices[4] = 2;
+    m_TrackAreaIndices[5] = 3;
 }
 
 Track::~Track()
@@ -19,7 +28,7 @@ Track::~Track()
 
 }
 
-void Track::Update()
+void Track::Update(Timestep ts)
 {
 
 }
@@ -33,7 +42,7 @@ void Track::Draw(Adafruit_SSD1306& display)
     {
         Point p1 = m_TrackVertices[m_TrackEdgeIndices[i]];
         Point p2 = m_TrackVertices[m_TrackEdgeIndices[i + 1]];
-        
+
         display.drawLine(p1.X(), p1.Y(), p2.X(), p2.Y(), WHITE);
     }
 }

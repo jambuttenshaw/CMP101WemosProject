@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/Timestep.h"
+#include "game_objects/Track.h"
 
 #include <Adafruit_SSD1306.h>
 #include <Geometry.h>
@@ -8,9 +9,9 @@
 class Car
 {
 public:
-    Car();
-    Car(Point position, Point direction);
-    Car(Point position, Rotation rot);
+    Car(Track* track);
+    Car(Track* track, Point position, Point direction);
+    Car(Track* track, Point position, Rotation rot);
     ~Car();
 
     inline void SetPosition(Point position) { m_Position = position; }
@@ -18,6 +19,7 @@ public:
 
     inline Point GetPosition() { return m_Position; }
     inline Point GetDirection() { return m_Direction; }
+    inline Rotation GetRotation() { return Rotation().FromEulerAngles(0, 0, atanf(m_Direction.Y() / m_Direction.X())); }
 
     void Update(Timestep ts);
     void Draw(Adafruit_SSD1306& display);
@@ -25,6 +27,8 @@ private:
     void Init();
 
 private:
+    Track* m_Track;
+
     float m_TopSpeed = 25;
     float m_Acceleration = 5;
 
