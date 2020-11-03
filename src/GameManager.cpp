@@ -1,5 +1,7 @@
 #include "GameManager.h"
 
+#include <Geometry.h>
+
 GameManager::GameManager()
 {
 
@@ -20,7 +22,7 @@ void GameManager::Init()
     // display the splash screen
     m_Display->display();
 
-    m_Car = new Car();
+    m_Car = new Car(Point({96, 32, 0}), Rotation().FromEulerAngles(0, 0, -DEG_TO_RAD * 90));
     m_Track = new Track();
 }
 

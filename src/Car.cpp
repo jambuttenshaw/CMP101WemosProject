@@ -28,8 +28,8 @@ void Car::Draw(Adafruit_SSD1306& display)
     int posY = (int)m_Position.Y();
 
     Point dir = GetDirectionVector();
-    int endX = posX + m_ViewLineLength * (int)dir.X();
-    int endY = posY + m_ViewLineLength * (int)dir.Y();
+    int endX = posX + (int)(m_ViewLineLength * dir.X());
+    int endY = posY + (int)(m_ViewLineLength * dir.Y());
 
     display.drawLine(posX, posY, endX, endY, 1);
 }
