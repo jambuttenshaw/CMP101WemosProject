@@ -26,8 +26,8 @@ void Car::Update()
 
     // convert the analogue input to radians
     float rads = DEG_TO_RAD * ((float)rawInput / 2.8444f + 90);
-    // set the rotation
-    SetRotation(Rotation().FromEulerAngles(0, 0, rads));
+    // set the direction
+    SetDirection(Rotation().FromEulerAngles(0, 0, rads));
 }
 
 void Car::Draw(Adafruit_SSD1306& display)
@@ -35,15 +35,16 @@ void Car::Draw(Adafruit_SSD1306& display)
     int posX = (int)m_Position.X();
     int posY = (int)m_Position.Y();
 
-    Point dir = GetDirectionVector();
-    int endX = posX + (int)(m_ViewLineLength * dir.X());
-    int endY = posY + (int)(m_ViewLineLength * dir.Y());
+    int endX = posX + (int)(m_ViewLineLength * m_Direction.X());
+    int endY = posY + (int)(m_ViewLineLength * m_Direction.Y());
 
     display.drawLine(posX, posY, endX, endY, 1);
 }
 
-Point Car::GetDirectionVector()
+void Car::SetDirection(Rotation rot)
 {
+    // take the vector that points right
+    // and rotate it by the transformation matrix rot
     Point p({ 1, 0, 0 });
-    return m_Direction * p;
+    m_Direction = rot * p;
 }
