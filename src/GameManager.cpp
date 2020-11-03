@@ -1,6 +1,7 @@
 #include "GameManager.h"
 
 #include "core/Timestep.h"
+#include "core/Input.h"
 
 #include <Geometry.h>
 
@@ -24,7 +25,10 @@ void GameManager::Init()
     // display the splash screen
     m_Display->display();
 
-    m_Car = new Car(Point({96, 32, 0}), Rotation().FromEulerAngles(0, 0, -DEG_TO_RAD * 90));
+    // initialize
+    Input::Init();
+
+    m_Car = new Car(Point({64, 32, 0}), Rotation().FromEulerAngles(0, 0, -DEG_TO_RAD * 90));
     m_Track = new Track();
 }
 

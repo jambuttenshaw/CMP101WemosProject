@@ -12,7 +12,7 @@ public:
 
     static int GetAnalogueIn(int pin = A0) { return analogRead(pin); }
     
-    static bool GetButtonPress() { GetDigitalRead(D6); }
+    static bool GetButtonPress() { return !GetDigitalRead(D6); }
 
-    static bool GetDigitalRead(int pin) { digitalRead(pin); }
+    static bool GetDigitalRead(int pin) { return digitalRead(pin); }
 };
