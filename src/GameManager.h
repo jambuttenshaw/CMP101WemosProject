@@ -5,8 +5,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-#include "Car.h"
-#include "Track.h"
+#include "game_objects/Car.h"
+#include "game_objects/Track.h"
 
 class GameManager
 {

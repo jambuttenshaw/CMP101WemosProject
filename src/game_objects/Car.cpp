@@ -1,6 +1,6 @@
 #include "Car.h"
 
-#include "Input.h"
+#include "core/Input.h"
 
 Car::Car()
     : m_Position(Point()), m_Direction(Point({0, 0, 1}))
@@ -11,7 +11,7 @@ Car::Car()
 Car::Car(Point position, Point direction)
     : m_Position(position), m_Direction(direction)
 {
-    
+
 }
 
 Car::Car(Point position, Rotation rot)
@@ -34,6 +34,16 @@ void Car::Update()
     float rads = DEG_TO_RAD * ((float)rawInput / 2.8444f + 90);
     // set the direction
     SetDirection(Rotation().FromEulerAngles(0, 0, rads));
+
+
+    // CAR MOTION
+    
+    // update position
+
+    // update velocity
+
+    // update acceleration
+
 }
 
 void Car::Draw(Adafruit_SSD1306& display)
