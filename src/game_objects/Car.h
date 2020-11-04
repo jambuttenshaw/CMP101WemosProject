@@ -22,9 +22,9 @@ public:
     inline Point GetPosition() { return m_Position; }
     inline Point GetDisplacement() { return m_Position - m_InitialPos; }
 
-    inline Point GetDirection() { return m_Direction; }
+    inline Point GetDirection() { return m_SteeringDirection; }
 
-    inline Rotation GetRotation() { return Rotation().FromEulerAngles(0, 0, atanf(m_Direction.Y() / m_Direction.X())); }
+    inline Rotation GetRotation() { return Rotation().FromEulerAngles(0, 0, atanf(m_SteeringDirection.Y() / m_SteeringDirection.X())); }
     inline Rotation GetInverseRotation() { return GetRotation().Inverse(); }
 
     void Update(Timestep ts);
@@ -40,7 +40,7 @@ private:
     Point m_Velocity;
     float m_InputThreshold = 0.0f; // how much of the speed the input is letting through
     // unit vector representing the direction the car is facing
-    Point m_Direction;
+    Point m_SteeringDirection;
 
     Point m_InitialPos;
 

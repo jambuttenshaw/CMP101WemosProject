@@ -6,13 +6,13 @@
 #include <Streaming.h>
 
 Car::Car()
-    : m_Position(Point()), m_Direction(Point({0, 0, 1}))
+    : m_Position(Point()), m_SteeringDirection(Point({0, 0, 1}))
 {
     Init();
 }
 
 Car::Car(Point position, Point direction)
-    : m_Position(position), m_Direction(direction)
+    : m_Position(position), m_SteeringDirection(direction)
 {
     Init();
 }
@@ -55,15 +55,14 @@ void Car::Update(Timestep ts)
 
     // CAR MOTION
     
-    // update position
-    // s = u * t + 1/2 * a * t * t
-    // newPos is the distance travelled this frame
-    Point newPos = m_Velocity * ts + m_InputThreshold * 0.5f * ts * ts;
-    m_Position += newPos;
+    // increment velocity
+    m_Velocity += m_SteeringDirection * m_InputThreshold;
+    float m = m_Velocity.Magnitude();
+    if (m > m_TopSpeed)
+        m_Velocity *= (m_TopSpeed / m);
 
-    // update velocity
-    // v = u + a * t
-    m_Velocity = m_Direction * m_InputThreshold * m_TopSpeed;
+    // move car
+    Translate(m_Velocity * ts);
 }
 
 void Car::Draw(Adafruit_SSD1306& display)
@@ -71,8 +70,8 @@ void Car::Draw(Adafruit_SSD1306& display)
     int posX = (int)m_Position.X();
     int posY = (int)m_Position.Y();
 
-    int endX = posX + (int)(m_ViewLineLength * m_Direction.X());
-    int endY = posY + (int)(m_ViewLineLength * m_Direction.Y());
+    int endX = posX + (int)(m_ViewLineLength * m_SteeringDirection.X());
+    int endY = posY + (int)(m_ViewLineLength * m_SteeringDirection.Y());
 
     display.drawLine(posX, posY, endX, endY, WHITE);
 }
@@ -82,5 +81,5 @@ void Car::SetDirection(Rotation rot)
     // take the vector that points right
     // and rotate it by the transformation matrix rot
     Point p({ 1, 0, 0 });
-    m_Direction = rot * p;
+    m_SteeringDirection = rot * p;
 }
