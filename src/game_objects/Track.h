@@ -12,6 +12,7 @@ class Track
 {
 public:
     Track();
+    Track(Point initialOffset);
     ~Track();
 
     inline void Translate(Point translation) { m_TrackTranslation += translation; }
@@ -22,6 +23,9 @@ public:
 
     void Update(Timestep ts);
     void Draw(Adafruit_SSD1306& display);
+
+private:
+    void CreateTrack();
 
 private:
     // GEOMETRY OF THE TRACK
