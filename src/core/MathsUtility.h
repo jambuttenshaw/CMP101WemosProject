@@ -11,3 +11,8 @@ Point Lerp(Point a, Point b, float t)
     // linear interpolation for vectors
     return a * (1 - t) + b * t; 
 }
+
+Point Normalize(Point p)
+{
+    return p / p.Magnitude();
+}
