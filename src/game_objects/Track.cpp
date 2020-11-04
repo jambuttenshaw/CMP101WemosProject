@@ -52,11 +52,6 @@ void Track::Draw(Adafruit_SSD1306& display)
 
     for (int i = 0; i < numIndices; i += 2)
     {
-        /*
-        Point p1 = m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i]];
-        Point p2 = m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i + 1]];
-        */
-
         Point p1 = m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i]]);
         Point p2 = m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i + 1]]);
 
