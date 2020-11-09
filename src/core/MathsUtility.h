@@ -16,3 +16,8 @@ Point Normalize(Point p)
 {
     return p / p.Magnitude();
 }
+
+void TransformPoint(Point& toTransform, Point translation, Rotation rotation)
+{
+    toTransform = (rotation * toTransform) + translation;
+}
