@@ -6,7 +6,7 @@
 #include <Streaming.h>
 
 Car::Car()
-    : m_Position(Point()), m_SteeringDirection(Point({0, 0, 1}))
+    : m_Position(Point()), m_SteeringDirection(Point({0, 0, 0}))
 {
     Init();
 }
@@ -34,7 +34,7 @@ void Car::Init()
 {
     // set the velocity and acceleration to 0 vectors
     m_Velocity = Point({0, 0, 0});
-    m_FacingDirection = Point({0, 1, 0});
+    m_FacingDirection = Point({0, -1, 0});
     
     m_InitialPos = m_Position;
 }

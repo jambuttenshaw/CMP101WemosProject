@@ -28,7 +28,7 @@ void GameManager::Init()
     // initialize
     Input::Init();
 
-    Point initCarPos = Point({64, 60, 0});
+    Point initCarPos = Point({64, 32, 0});
 
     m_Track = new Track(initCarPos);
     m_Car = new Car(initCarPos, Rotation());
@@ -44,20 +44,6 @@ void GameManager::Update()
     // update the game objects
     m_Car->Update(dt);
     m_Track->Update(dt);
-
-    /* ------- to be revisited -----------
-    // scroll the screen
-    Point translation = -m_Car->GetDisplacement();
-    m_Car->Translate(translation);
-    m_Track->Translate(translation);
-
-
-    // rotate the screen
-    Rotation rot = m_Car->GetInverseRotation();
-    // rotating car by the inverse of its rotation will rotate it back to where it started
-    m_Car->SetDirection(m_DefaultCarRotation);
-    m_Track->SetRotation(rot);
-    */
 }
 
 void GameManager::Draw()
