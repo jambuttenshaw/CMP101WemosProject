@@ -17,6 +17,8 @@ public:
     inline void SetRotation(float angle) { m_RotationAngle = angle; SetMatrix(); }
     inline void SetRotation(Rotation rot) { m_Rotation = rot; }
 
+    inline Rotation GetRotation() { return m_Rotation; }
+
 private:
     inline void SetMatrix() { m_Rotation = Rotation().FromEulerAngles(0, 0, m_RotationAngle); }
 

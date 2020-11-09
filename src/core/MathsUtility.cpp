@@ -21,3 +21,8 @@ Point TransformPoint(Point toTransform, Point translation, Rotation rotation)
 {
     return (rotation * toTransform) + translation;
 }
+
+Point InverseTransformPoint(Point toTransform, Point translation, Rotation rotation)
+{
+    return rotation * (toTransform + translation);
+}

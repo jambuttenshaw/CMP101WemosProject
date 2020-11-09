@@ -20,6 +20,8 @@ public:
     inline Point GetPosition() { return m_Position; }
     inline Point GetDisplacement() { return m_Position - m_InitialPos; }
 
+    inline float GetAngularDisplacement() { return m_AngularDisplacement; }
+
     void Update(Timestep ts);
     void Draw(Adafruit_SSD1306& display, Camera& camera);
 private:

@@ -49,6 +49,7 @@ void GameManager::Update()
     m_Track->Update(dt);
 
     m_Camera->SetPosition(-m_Car->GetDisplacement());
+    m_Camera->SetRotation(HALF_PI-m_Car->GetAngularDisplacement());
 }
 
 void GameManager::Draw()

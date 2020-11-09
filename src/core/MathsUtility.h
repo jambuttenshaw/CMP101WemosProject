@@ -8,3 +8,4 @@ Point Lerp(Point a, Point b, float t);
 Point Normalize(Point p);
 
 Point TransformPoint(Point toTransform, Point translation, Rotation rotation);
+Point InverseTransformPoint(Point toTransform, Point translation, Rotation rotation);
