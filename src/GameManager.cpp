@@ -29,7 +29,9 @@ void GameManager::Init()
     // initialize
     Input::Init();
 
-    Point initCarPos = Point({64, 32, 0});
+    Point initCarPos = Point({0, 0, 0});
+
+    m_CameraOffset = initCarPos;
 
     m_Camera = new Camera(initCarPos);
 
@@ -48,8 +50,8 @@ void GameManager::Update()
     m_Car->Update(dt);
     m_Track->Update(dt);
 
-    m_Camera->SetPosition(-m_Car->GetDisplacement());
-    m_Camera->SetRotation(HALF_PI-m_Car->GetAngularDisplacement());
+    m_Camera->SetPosition(m_CameraOffset - m_Car->GetPosition());
+    m_Camera->SetRotation(HALF_PI - m_Car->GetAngularDisplacement());
 }
 
 void GameManager::Draw()

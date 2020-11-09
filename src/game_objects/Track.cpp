@@ -57,6 +57,9 @@ void Track::Draw(Adafruit_SSD1306& display, Camera& camera)
         Point p1 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i]]), camera.GetPosition(), camera.GetRotation());
         Point p2 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i + 1]]), camera.GetPosition(), camera.GetRotation());
 
+        p1 = Point({64 + p1.X(), 32 - p1.Y(), 0});
+        p2 = Point({64 + p2.X(), 32 - p2.Y(), 0});
+
         display.drawLine(p1.X(), p1.Y(), p2.X(), p2.Y(), WHITE);
     }
 }

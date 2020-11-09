@@ -23,11 +23,10 @@ private:
     unsigned long m_LastFrameTime = 0UL;
 
     Adafruit_SSD1306* m_Display;
-
     Camera* m_Camera;
-
     Car* m_Car;
     Track* m_Track;
 
     Rotation m_DefaultCarRotation;
+    Point m_CameraOffset;
 };

@@ -64,6 +64,9 @@ void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
 
     Point screenPos = InverseTransformPoint(m_Position, camera.GetPosition(), camera.GetRotation());
     Point screenLineEnd = InverseTransformPoint(lineEnd, camera.GetPosition(), camera.GetRotation());
-  
-    display.drawLine((int)screenPos.X(), (int)screenPos.Y(), (int)screenLineEnd.X(), (int)screenLineEnd.Y(), WHITE);
+
+    screenPos = Point({64 + screenPos.X(), 32 - screenPos.Y(), 0});
+    screenLineEnd = Point({64 + screenLineEnd.X(), 32 - screenLineEnd.Y(), 0});
+
+    display.drawLine(screenPos.X(), screenPos.Y(), screenLineEnd.X(), screenLineEnd.Y(), WHITE);
 }
