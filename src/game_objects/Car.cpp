@@ -32,18 +32,20 @@ Car::~Car()
 
 void Car::Init()
 {
-    // set the velocity and acceleration to 0 vectors
-    m_Velocity = Point({0, 0, 0});
-    m_FacingDirection = Point({0, 1, 0});
+    m_Velocity = Point({0, 1, 0});
     
     m_InitialPos = m_Position;
 }
 
 void Car::Update(Timestep ts)
 {
-    // an int between 0 and 1024 representing how far the steering has been turned
-    // 512 is neutral steering
-    int rawSteeringIn = Input::GetAnalogueIn();
+    // Get a float in radians from -PI to PI representing how hard the steering has been turned
+    float rawSteeringIn = PI * (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
+
+    angle += rawSteeringIn * ts;
+    
+    m_Velocity = Point({cos(angle), sin(angle), 1});
+
 }
 
 void Car::Draw(Adafruit_SSD1306& display)
@@ -51,8 +53,8 @@ void Car::Draw(Adafruit_SSD1306& display)
     int posX = (int)m_Position.X();
     int posY = (int)m_Position.Y();
 
-    int endX = posX + (int)(m_ViewLineLength * m_FacingDirection.X());
-    int endY = posY + (int)(m_ViewLineLength * m_FacingDirection.Y());
+    int endX = posX + (int)(m_ViewLineLength * m_Velocity.X());
+    int endY = posY + (int)(m_ViewLineLength * m_Velocity.Y());
 
     display.drawLine(posX, posY, endX, endY, WHITE);
 }
