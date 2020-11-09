@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/Timestep.h"
-#include "game_objects/Track.h"
+#include "Camera.h"
 
 #include <Adafruit_SSD1306.h>
 #include <Geometry.h>
@@ -21,7 +21,7 @@ public:
     inline Point GetDisplacement() { return m_Position - m_InitialPos; }
 
     void Update(Timestep ts);
-    void Draw(Adafruit_SSD1306& display);
+    void Draw(Adafruit_SSD1306& display, Camera& camera);
 private:
     void Init();
 

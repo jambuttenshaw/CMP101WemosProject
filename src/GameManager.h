@@ -7,6 +7,7 @@
 
 #include "game_objects/Car.h"
 #include "game_objects/Track.h"
+#include "game_objects/Camera.h"
 
 class GameManager
 {
@@ -22,6 +23,8 @@ private:
     unsigned long m_LastFrameTime = 0UL;
 
     Adafruit_SSD1306* m_Display;
+
+    Camera* m_Camera;
 
     Car* m_Car;
     Track* m_Track;

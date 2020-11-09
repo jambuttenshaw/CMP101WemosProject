@@ -58,7 +58,7 @@ void Car::Update(Timestep ts)
     m_Position += m_Velocity * m_Speed * ts;
 }
 
-void Car::Draw(Adafruit_SSD1306& display)
+void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
 {
     int posX = (int)m_Position.X();
     int posY = (int)m_Position.Y();

@@ -45,7 +45,7 @@ void Track::Update(Timestep ts)
 
 }
 
-void Track::Draw(Adafruit_SSD1306& display)
+void Track::Draw(Adafruit_SSD1306& display, Camera& camera)
 {
     // the number of lines is half the number of indices
     int numIndices = sizeof(m_TrackEdgeIndices) / sizeof(unsigned int);

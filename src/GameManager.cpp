@@ -14,6 +14,7 @@ GameManager::~GameManager()
 {
     delete m_Car;
     delete m_Track;
+    delete m_Camera;
 }
 
 void GameManager::Init()
@@ -29,6 +30,8 @@ void GameManager::Init()
     Input::Init();
 
     Point initCarPos = Point({64, 32, 0});
+
+    m_Camera = new Camera(initCarPos);
 
     m_Track = new Track(initCarPos);
     m_Car = new Car(initCarPos, Rotation());
@@ -50,8 +53,8 @@ void GameManager::Draw()
 {
     m_Display->clearDisplay();
 
-    m_Track->Draw(*m_Display);
-    m_Car->Draw(*m_Display);
+    m_Track->Draw(*m_Display, *m_Camera);
+    m_Car->Draw(*m_Display, *m_Camera);
 
     m_Display->display();
 }

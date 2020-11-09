@@ -4,6 +4,7 @@
 #include <Geometry.h>
 
 #include "core/Timestep.h"
+#include "Camera.h"
 
 #include <vector>
 
@@ -22,7 +23,7 @@ public:
     inline void Rotate(Rotation rot) { m_TrackRotation *= rot; }
 
     void Update(Timestep ts);
-    void Draw(Adafruit_SSD1306& display);
+    void Draw(Adafruit_SSD1306& display, Camera& camera);
 
 private:
     void CreateTrack();
