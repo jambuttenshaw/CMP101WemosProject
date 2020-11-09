@@ -28,11 +28,10 @@ void GameManager::Init()
     // initialize
     Input::Init();
 
-    m_DefaultCarRotation = Rotation().FromEulerAngles(0, 0, -DEG_TO_RAD * 90);
-    Point initCarPos = Point({64, 32, 0});
+    Point initCarPos = Point({64, 60, 0});
 
     m_Track = new Track(initCarPos);
-    m_Car = new Car(initCarPos, m_DefaultCarRotation);
+    m_Car = new Car(initCarPos, Rotation());
 }
 
 void GameManager::Update()

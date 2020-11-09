@@ -33,14 +33,17 @@ private:
     void Init();
 
 private:
-    float m_TopSpeed = 25;
-    float m_Acceleration = 5;
+    float m_TopSpeed = 15;
+    float m_Acceleration = 8;
 
     Point m_Position;
     Point m_Velocity;
-    float m_InputThreshold = 0.0f; // how much of the speed the input is letting through
-    // unit vector representing the direction the car is facing
     Point m_SteeringDirection;
+    
+    // unit vector representing the direction the car is facing
+    Point m_FacingDirection;
+
+    float m_InputThreshold = 0.0f; // how much of the speed the input is letting through
 
     Point m_InitialPos;
 
