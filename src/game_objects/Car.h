@@ -26,12 +26,16 @@ private:
     void Init();
 
 private:
-    float m_TopSpeed = 15;
+    float m_TopSpeed = 10;
     float m_Acceleration = 8;
 
     Point m_Position;
     Point m_Velocity;
-    float m_SteeringAngle = -HALF_PI;
+
+    float m_Speed = 0;
+
+    float m_AngularDisplacement = -HALF_PI;
+    float m_AngularVelocity = 0;
 
     float m_InputThreshold = 0.0f; // how much of the speed the input is letting through
 

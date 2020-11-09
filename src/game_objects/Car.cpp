@@ -43,13 +43,19 @@ void Car::Init()
 void Car::Update(Timestep ts)
 {
     // Get a float in radians from -PI to PI representing how hard the steering has been turned
-    float rawSteeringIn = (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
-    float steeringAngle = PI * rawSteeringIn;
-
-    m_SteeringAngle += rawSteeringIn * ts;
+    m_AngularVelocity = PI * (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
+    m_AngularDisplacement += m_AngularVelocity * ts;
     
-    m_Velocity = Point({cos(m_SteeringAngle), sin(m_SteeringAngle), 1});
+    // point the car in the direction of the angular displacement
+    m_Velocity = Point({cos(m_AngularDisplacement), sin(m_AngularDisplacement), 1});
+    
+    // calculate the magnitude of the velocity
+    bool buttonPress = Input::GetButtonPress();
+    m_InputThreshold = Lerp(m_InputThreshold, buttonPress ? 1 : 0, ts * m_Acceleration);
 
+    m_Speed = m_InputThreshold * m_TopSpeed;
+
+    m_Position += m_Velocity * m_Speed * ts;
 }
 
 void Car::Draw(Adafruit_SSD1306& display)
