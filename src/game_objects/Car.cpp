@@ -6,13 +6,13 @@
 #include <Streaming.h>
 
 Car::Car()
-    : m_Position(Point()), m_SteeringDirection(Point({0, 0, 0}))
+    : m_Position(Point())
 {
     Init();
 }
 
 Car::Car(Point position, Point direction)
-    : m_Position(position), m_SteeringDirection(direction)
+    : m_Position(position)
 {
     Init();
 }
@@ -20,15 +20,18 @@ Car::Car(Point position, Point direction)
 Car::Car(Point position, Rotation rot)
     : m_Position(position)
 {
-    SetDirection(rot);
-
     Init();
 }
+
+
 
 Car::~Car()
 {
 
 }
+
+
+
 
 void Car::Init()
 {
@@ -40,11 +43,12 @@ void Car::Init()
 void Car::Update(Timestep ts)
 {
     // Get a float in radians from -PI to PI representing how hard the steering has been turned
-    float rawSteeringIn = PI * (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
+    float rawSteeringIn = (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
+    float steeringAngle = PI * rawSteeringIn;
 
-    angle += rawSteeringIn * ts;
+    m_SteeringAngle += rawSteeringIn * ts;
     
-    m_Velocity = Point({cos(angle), sin(angle), 1});
+    m_Velocity = Point({cos(m_SteeringAngle), sin(m_SteeringAngle), 1});
 
 }
 
@@ -57,9 +61,4 @@ void Car::Draw(Adafruit_SSD1306& display)
     int endY = posY + (int)(m_ViewLineLength * m_Velocity.Y());
 
     display.drawLine(posX, posY, endX, endY, WHITE);
-}
-
-void Car::SetDirection(Rotation rot)
-{
-    
 }

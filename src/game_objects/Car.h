@@ -17,15 +17,8 @@ public:
     inline void SetPosition(Point position) { m_Position = position; }
     inline void Translate(Point translation) { m_Position += translation; }
 
-    void SetDirection(Rotation rot);
-
     inline Point GetPosition() { return m_Position; }
     inline Point GetDisplacement() { return m_Position - m_InitialPos; }
-
-    inline Point GetDirection() { return m_SteeringDirection; }
-
-    inline Rotation GetRotation() { return Rotation().FromEulerAngles(0, 0, atanf(m_SteeringDirection.Y() / m_SteeringDirection.X())); }
-    inline Rotation GetInverseRotation() { return GetRotation().Inverse(); }
 
     void Update(Timestep ts);
     void Draw(Adafruit_SSD1306& display);
@@ -36,11 +29,9 @@ private:
     float m_TopSpeed = 15;
     float m_Acceleration = 8;
 
-    float angle = HALF_PI;
-
     Point m_Position;
-    Point m_FacingDirection;
-    Point m_SteeringDirection;
+    Point m_Velocity;
+    float m_SteeringAngle = -HALF_PI;
 
     float m_InputThreshold = 0.0f; // how much of the speed the input is letting through
 
