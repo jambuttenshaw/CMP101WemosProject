@@ -48,7 +48,7 @@ void GameManager::Update()
     m_Car->Update(dt);
     m_Track->Update(dt);
 
-    m_Camera->SetPosition(m_Car->GetPosition());
+    m_Camera->SetPosition(-m_Car->GetDisplacement());
 }
 
 void GameManager::Draw()

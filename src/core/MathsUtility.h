@@ -19,5 +19,5 @@ Point Normalize(Point p)
 
 Point TransformPoint(Point toTransform, Point translation, Rotation rotation)
 {
-    toTransform = (rotation * toTransform) + translation;
+    return (rotation * toTransform) + translation;
 }
