@@ -47,6 +47,8 @@ void GameManager::Update()
     // update the game objects
     m_Car->Update(dt);
     m_Track->Update(dt);
+
+    m_Camera->SetPosition(m_Car->GetPosition());
 }
 
 void GameManager::Draw()
