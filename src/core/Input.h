@@ -2,17 +2,24 @@
 
 #include <Arduino.h>
 
+#define BUTTON_PIN D3
+#define ANALOGUE_PIN A0
+
 class Input
 {
 public:
     static void Init()
     {
-        pinMode(D6, INPUT_PULLUP);
+        pinMode(BUTTON_PIN, INPUT_PULLUP);
     }
 
-    static int GetAnalogueIn(int pin = A0) { return analogRead(pin); }
+    // ANALOGUE INPUT
+    static int GetAnalogueIn(int pin = ANALOGUE_PIN) { return analogRead(pin); }
+    const static int AnalogueMax = 1024;
+    const static int AnalogueMin = 0;
+    const static int AnalogueMid = (AnalogueMax - AnalogueMin) / 2;
     
-    static bool GetButtonPress() { return !GetDigitalRead(D3); }
+    static bool GetButtonPress() { return !GetDigitalRead(BUTTON_PIN); }
 
     static bool GetDigitalRead(int pin) { return digitalRead(pin); }
 };

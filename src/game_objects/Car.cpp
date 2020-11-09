@@ -34,14 +34,16 @@ void Car::Init()
 {
     // set the velocity and acceleration to 0 vectors
     m_Velocity = Point({0, 0, 0});
-    m_FacingDirection = Point({0, -1, 0});
+    m_FacingDirection = Point({0, 1, 0});
     
     m_InitialPos = m_Position;
 }
 
 void Car::Update(Timestep ts)
 {
-
+    // an int between 0 and 1024 representing how far the steering has been turned
+    // 512 is neutral steering
+    int rawSteeringIn = Input::GetAnalogueIn();
 }
 
 void Car::Draw(Adafruit_SSD1306& display)
