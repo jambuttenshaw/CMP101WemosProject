@@ -1,5 +1,7 @@
 #include "Track.h"
 
+#include "core/MathsUtility.h"
+
 Track::Track()
     : m_TrackTranslation(Point()), m_TrackRotation(Rotation())
 {
@@ -52,8 +54,8 @@ void Track::Draw(Adafruit_SSD1306& display, Camera& camera)
 
     for (int i = 0; i < numIndices; i += 2)
     {
-        Point p1 = m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i]]);
-        Point p2 = m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i + 1]]);
+        Point p1 = TransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i]]), camera.GetPosition(), Rotation());
+        Point p2 = TransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i + 1]]), camera.GetPosition(), Rotation());
 
         display.drawLine(p1.X(), p1.Y(), p2.X(), p2.Y(), WHITE);
     }
