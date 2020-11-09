@@ -60,11 +60,10 @@ void Car::Update(Timestep ts)
 
 void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
 {
-    int posX = (int)m_Position.X();
-    int posY = (int)m_Position.Y();
+    Point lineEnd = m_Position + m_Velocity * m_ViewLineLength;
 
-    int endX = posX + (int)(m_ViewLineLength * m_Velocity.X());
-    int endY = posY + (int)(m_ViewLineLength * m_Velocity.Y());
-
-    display.drawLine(posX, posY, endX, endY, WHITE);
+    Point screenPos = TransformPoint(m_Position, camera.GetPosition(), Rotation());
+    Point screenLineEnd = TransformPoint(lineEnd, camera.GetPosition(), Rotation());
+    
+    display.drawLine((int)screenPos.X(), (int)screenPos.Y(), (int)screenLineEnd.X(), (int)screenLineEnd.Y(), WHITE);
 }
