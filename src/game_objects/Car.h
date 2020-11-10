@@ -28,8 +28,8 @@ private:
     void Init();
 
 private:
-    float m_TopSpeed = 10;
-    float m_Acceleration = 8;
+    float m_TopSpeed = 50;
+    float m_Acceleration = 15;
 
     Point m_Position;
     Point m_Velocity;

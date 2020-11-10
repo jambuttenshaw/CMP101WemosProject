@@ -30,8 +30,8 @@ private:
 
 private:
     // GEOMETRY OF THE TRACK
-    Point m_TrackVertices[4]; // an array of points that define the shape of the track
-    unsigned int m_TrackEdgeIndices[4]; // an array of indices that define how the points that make up the track should be joined together
+    Point m_TrackVertices[103]; // an array of points that define the shape of the track
+    unsigned int m_TrackEdgeIndices[206]; // an array of indices that define how the points that make up the track should be joined together
     unsigned int m_TrackAreaIndices[6]; // an array of indices that define the area that the track covers, for checking when the car is on or off the track
 
     Point m_TrackTranslation;
