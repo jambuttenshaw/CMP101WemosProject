@@ -26,3 +26,10 @@ Point InverseTransformPoint(Point toTransform, Point translation, Rotation rotat
 {
     return rotation * (toTransform + translation);
 }
+
+float CalculateAreaTriangle(Point v1, Point v2, Point v3)
+{
+    float det = 0.0f;
+    det = ((v1.X() - v3.X()) * (v2.Y() - v3.Y())) - ((v2.X() - v3.X()) * (v1.Y() - v3.Y()));
+    return 0.5f * det;
+}

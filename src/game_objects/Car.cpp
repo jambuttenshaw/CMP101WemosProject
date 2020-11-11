@@ -11,6 +11,12 @@ Car::Car()
     Init();
 }
 
+Car::Car(Point position)
+    : m_Position(position)
+{
+    Init();
+}
+
 Car::Car(Point position, Point direction)
     : m_Position(position)
 {

@@ -10,6 +10,7 @@ class Car
 {
 public:
     Car();
+    Car(Point position);
     Car(Point position, Point direction);
     Car(Point position, Rotation rot);
     ~Car();
@@ -18,9 +19,10 @@ public:
     inline void Translate(Point translation) { m_Position += translation; }
 
     inline Point GetPosition() { return m_Position; }
-    inline Point GetDisplacement() { return m_Position - m_InitialPos; }
 
     inline float GetAngularDisplacement() { return m_AngularDisplacement; }
+
+    inline void SetOnTrack(bool onTrack) { m_OnTrack = onTrack; }
 
     void Update(Timestep ts);
     void Draw(Adafruit_SSD1306& display, Camera& camera);
@@ -42,6 +44,8 @@ private:
     float m_InputThreshold = 0.0f; // how much of the speed the input is letting through
 
     Point m_InitialPos;
+
+    bool m_OnTrack = true;
 
     // Graphics
     int carWidth = 6;

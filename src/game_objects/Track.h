@@ -37,11 +37,15 @@ public:
 
     inline void SetDrawMode(DrawMode mode) { m_DrawMode = mode; }
 
+    bool PointOnTrack(Point p);
+
 private:
     void DrawLines(Adafruit_SSD1306& display, Camera& camera);
     void DrawTriangles(Adafruit_SSD1306& display, Camera& camera);
 
     void CreateTrack();
+
+    bool PointInsideTriangle(Point p, Point v1, Point v2, Point v3);
 
 private:
     DrawMode m_DrawMode = DrawMode::Lines;

@@ -36,7 +36,7 @@ void GameManager::Init()
     m_Camera = new Camera(initCarPos);
 
     m_Track = new Track(initCarPos);
-    m_Car = new Car(initCarPos, Rotation());
+    m_Car = new Car(initCarPos);
 }
 
 void GameManager::Update()
@@ -45,6 +45,11 @@ void GameManager::Update()
     unsigned long newTime = millis();
     Timestep dt((float)(newTime - m_LastFrameTime) / 1000.0f);
     m_LastFrameTime = newTime;
+
+    // pre-update settings
+    // we need the car to know if it is on the track
+    bool carOnTrack = m_Track->PointOnTrack(m_Car->GetPosition());
+    m_Car->SetOnTrack(carOnTrack);
 
     // update the game objects
     m_Car->Update(dt);

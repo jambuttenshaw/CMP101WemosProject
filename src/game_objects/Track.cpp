@@ -568,6 +568,23 @@ void Track::Update(Timestep ts)
 
 }
 
+bool Track::PointOnTrack(Point p)
+{
+    int triangleVertexCount = sizeof(m_TrackAreaIndices) / (sizeof(unsigned int));
+    for (int i = 0; i < triangleVertexCount; i += 3)
+    {
+        Point v1 = m_TrackVertices[i];
+        Point v2 = m_TrackVertices[i + 1];
+        Point v3 = m_TrackVertices[i + 2];
+
+        if (PointInsideTriangle(p, v1, v2, v3))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Track::Draw(Adafruit_SSD1306& display, Camera& camera)
 {
     Draw(m_DrawMode, display, camera);
@@ -616,4 +633,14 @@ void Track::DrawTriangles(Adafruit_SSD1306& display, Camera& camera)
 
         display.fillTriangle(p1.X(), p1.Y(), p2.X(), p2.Y(), p3.X(), p3.Y(), WHITE);
     }
+}
+
+bool Track::PointInsideTriangle(Point p, Point v1, Point v2, Point v3)
+{
+    float totalArea = CalculateAreaTriangle(v1, v2, v3);
+    float area1 = CalculateAreaTriangle(p, v2, v3);
+    float area2 = CalculateAreaTriangle(v1, p, v3);
+    float area3 = CalculateAreaTriangle(v1, v2, p);
+
+    return (area1 + area2 + area3) <= totalArea;
 }
