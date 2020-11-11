@@ -28,8 +28,8 @@ private:
     void Init();
 
 private:
-    float m_TopSpeed = 50;
-    float m_Acceleration = 15;
+    float m_TopSpeed = 25;
+    float m_Acceleration = 8;
 
     Point m_Position;
     Point m_Velocity;
@@ -43,5 +43,7 @@ private:
 
     Point m_InitialPos;
 
-    int m_ViewLineLength = 16;
+    // Graphics
+    int carWidth = 6;
+    int carLength = 12;
 };

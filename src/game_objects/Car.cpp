@@ -60,13 +60,8 @@ void Car::Update(Timestep ts)
 
 void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
 {
-    Point lineEnd = m_Position + m_Velocity * m_ViewLineLength;
-
     Point screenPos = InverseTransformPoint(m_Position, camera.GetPosition(), camera.GetRotation());
-    Point screenLineEnd = InverseTransformPoint(lineEnd, camera.GetPosition(), camera.GetRotation());
-
     screenPos = Point({64 + screenPos.X(), 32 - screenPos.Y(), 0});
-    screenLineEnd = Point({64 + screenLineEnd.X(), 32 - screenLineEnd.Y(), 0});
 
-    display.drawLine(screenPos.X(), screenPos.Y(), screenLineEnd.X(), screenLineEnd.Y(), WHITE);
+    display.fillRect(screenPos.X() - carWidth * 0.5f, screenPos.Y() - carLength * 0.5f, carWidth, carLength, BLACK);
 }
