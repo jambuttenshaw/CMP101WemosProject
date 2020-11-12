@@ -6,48 +6,33 @@
 #include <Streaming.h>
 
 Car::Car()
-    : m_Position(Point())
+    : m_InitialPos(Point())
 {
     Init();
 }
 
 Car::Car(Point position)
-    : m_Position(position)
+    : m_InitialPos(position)
 {
     Init();
 }
-
-Car::Car(Point position, Point direction)
-    : m_Position(position)
-{
-    Init();
-}
-
-Car::Car(Point position, Rotation rot)
-    : m_Position(position)
-{
-    Init();
-}
-
-
 
 Car::~Car()
 {
 
 }
 
-
-
-
 void Car::Init()
 {
-    m_Velocity = Point({0, 1, 0});
-    
-    m_InitialPos = m_Position;
+    m_Force = Point();
+    m_Acceleration = Point();
+    m_Velocity = Point();
+    m_Position = m_InitialPos;
 }
 
 void Car::Update(Timestep ts)
 {
+    /*
     // Get a float in radians from -PI to PI representing how hard the steering has been turned
     m_AngularVelocity = PI * (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
     m_AngularDisplacement += m_AngularVelocity * ts;
@@ -62,6 +47,21 @@ void Car::Update(Timestep ts)
     m_Speed = m_InputThreshold * m_TopSpeed;
 
     m_Position += m_Velocity * m_Speed * ts;
+    */
+
+
+    m_Thrust = m_EngineForce * Input::GetButtonPress();
+    m_DragForce = (m_OnTrack ? m_TrackCoefficient : m_OffTrackCoefficient) * m_Velocity.DotProduct(m_Velocity);
+
+    // ADD ANGULAR ACCELERATION
+    m_AngularVelocity = PI * (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
+    m_AngularDisplacement += m_AngularVelocity * ts;
+
+    m_Force = Point({cos(m_AngularDisplacement), sin(m_AngularDisplacement), 1}) * (m_EngineForce - m_DragForce);
+
+    m_Acceleration = m_Force / m_Mass;
+    m_Velocity += m_Acceleration * ts;
+    m_Position += m_Velocity * ts + m_Acceleration * ts * ts * 0.5f;
 }
 
 void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
