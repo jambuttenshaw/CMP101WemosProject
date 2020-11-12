@@ -21,22 +21,6 @@ Track::~Track()
 
 void Track::CreateTrack()
 {
-    m_TrackVertices[0] = Point({0, -32, 0});
-    m_TrackVertices[1] = Point({-64, 32, 0});
-    m_TrackVertices[2] = Point({64, 32, 0});
-
-    m_TrackEdgeIndices[0] = 0;
-    m_TrackEdgeIndices[1] = 1;
-    m_TrackEdgeIndices[2] = 0;
-    m_TrackEdgeIndices[3] = 2;
-    m_TrackEdgeIndices[4] = 1;
-    m_TrackEdgeIndices[5] = 2;
-
-    m_TrackAreaIndices[0] = 0;
-    m_TrackAreaIndices[1] = 1;
-    m_TrackAreaIndices[2] = 2;
-
-    /*
     // create the track
     m_TrackVertices[0] = Point({-20, -33, 0});
     m_TrackVertices[1] = Point({-23, 35, 0});
@@ -577,7 +561,7 @@ void Track::CreateTrack()
     m_TrackAreaIndices[264] = 0;
     m_TrackAreaIndices[265] = 40;
     m_TrackAreaIndices[266] = 41;
-    */
+    
 }
 
 void Track::Update(Timestep ts)
@@ -590,9 +574,9 @@ bool Track::PointOnTrack(Point p)
     int triangleVertexCount = sizeof(m_TrackAreaIndices) / (sizeof(unsigned int));
     for (int i = 0; i < triangleVertexCount; i += 3)
     {
-        Point v1 = m_TrackVertices[i];
-        Point v2 = m_TrackVertices[i + 1];
-        Point v3 = m_TrackVertices[i + 2];
+        Point v1 = m_TrackVertices[m_TrackAreaIndices[i]];
+        Point v2 = m_TrackVertices[m_TrackAreaIndices[i + 1]];
+        Point v3 = m_TrackVertices[m_TrackAreaIndices[i + 2]];
 
         if (PointInsideTriangle(p, v1, v2, v3))
         {

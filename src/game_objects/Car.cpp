@@ -48,9 +48,6 @@ void Car::Init()
 
 void Car::Update(Timestep ts)
 {
-
-    Serial << "Car on track: " << m_OnTrack << endl;
-
     // Get a float in radians from -PI to PI representing how hard the steering has been turned
     m_AngularVelocity = PI * (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
     m_AngularDisplacement += m_AngularVelocity * ts;
@@ -72,5 +69,5 @@ void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
     Point screenPos = InverseTransformPoint(m_Position, camera.GetPosition(), camera.GetRotation());
     screenPos = Point({64 + screenPos.X(), 32 - screenPos.Y(), 0});
 
-    display.fillRect(screenPos.X() - carWidth * 0.5f, screenPos.Y() - carLength * 0.5f, carWidth, carLength, BLACK);
+    display.fillRect(screenPos.X() - carWidth * 0.5f, screenPos.Y() - carLength * 0.5f, carWidth, carLength, INVERSE);
 }
