@@ -21,6 +21,22 @@ Track::~Track()
 
 void Track::CreateTrack()
 {
+    m_TrackVertices[0] = Point({0, -32, 0});
+    m_TrackVertices[1] = Point({-64, 32, 0});
+    m_TrackVertices[2] = Point({64, 32, 0});
+
+    m_TrackEdgeIndices[0] = 0;
+    m_TrackEdgeIndices[1] = 1;
+    m_TrackEdgeIndices[2] = 0;
+    m_TrackEdgeIndices[3] = 2;
+    m_TrackEdgeIndices[4] = 1;
+    m_TrackEdgeIndices[5] = 2;
+
+    m_TrackAreaIndices[0] = 0;
+    m_TrackAreaIndices[1] = 1;
+    m_TrackAreaIndices[2] = 2;
+
+    /*
     // create the track
     m_TrackVertices[0] = Point({-20, -33, 0});
     m_TrackVertices[1] = Point({-23, 35, 0});
@@ -561,6 +577,7 @@ void Track::CreateTrack()
     m_TrackAreaIndices[264] = 0;
     m_TrackAreaIndices[265] = 40;
     m_TrackAreaIndices[266] = 41;
+    */
 }
 
 void Track::Update(Timestep ts)
@@ -633,14 +650,4 @@ void Track::DrawTriangles(Adafruit_SSD1306& display, Camera& camera)
 
         display.fillTriangle(p1.X(), p1.Y(), p2.X(), p2.Y(), p3.X(), p3.Y(), WHITE);
     }
-}
-
-bool Track::PointInsideTriangle(Point p, Point v1, Point v2, Point v3)
-{
-    float totalArea = CalculateAreaTriangle(v1, v2, v3);
-    float area1 = CalculateAreaTriangle(p, v2, v3);
-    float area2 = CalculateAreaTriangle(v1, p, v3);
-    float area3 = CalculateAreaTriangle(v1, v2, p);
-
-    return (area1 + area2 + area3) <= totalArea;
 }

@@ -48,6 +48,9 @@ void Car::Init()
 
 void Car::Update(Timestep ts)
 {
+
+    Serial << "Car on track: " << m_OnTrack << endl;
+
     // Get a float in radians from -PI to PI representing how hard the steering has been turned
     m_AngularVelocity = PI * (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
     m_AngularDisplacement += m_AngularVelocity * ts;
