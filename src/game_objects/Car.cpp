@@ -24,44 +24,60 @@ Car::~Car()
 
 void Car::Init()
 {
-    m_Force = Point();
+    m_Thrust = Point();
+    m_DragForce = Point();
+    m_UnbalancedForce = Point();
+
     m_Acceleration = Point();
     m_Velocity = Point();
     m_Position = m_InitialPos;
+
+    m_Rotation = Rotation();
+
+    // I = mr^2
+    m_MomentOfIntertia = m_Mass * m_Radius * m_Radius;
 }
 
 void Car::Update(Timestep ts)
 {
-    /*
-    // Get a float in radians from -PI to PI representing how hard the steering has been turned
-    m_AngularVelocity = PI * (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
-    m_AngularDisplacement += m_AngularVelocity * ts;
+    // magnitude is expensive to compute, so well make sure to only do it once each frame
+    float velocityMagnitude = m_Velocity.Magnitude();
+
+
+    // Calculate the angle that the front wheels are pointing in
+    m_WheelAngle = m_MaxWheelAngle * ((float)(Input::GetAnalogueIn()) / (float)(Input::AnalogueMid) - 1);
+    // calculate the radius of turn this wheel angle would produce at this speed
+    m_TurnRadius = 0;
+    for (int i = 0; i < ceil(PI / m_WheelAngle); i++)
+    {
+        m_TurnRadius += sin(i * m_WheelAngle);
+    }
+    m_TurnRadius *= 0.5f; // the actual turn radius is this value scaled by the velocity magnitude
+                          // however we dont do that right now as you shall see...
+
+    // calculate the centripetal force
+    // F = (mv^2) / r
+    // however, since we have not scaled r by the velocity magnitude as we should have:
+    // F = mv / r
+    m_CentripetalForce = m_Mass * velocityMagnitude / m_TurnRadius;
+    m_Torque = m_CentripetalForce * m_Radius;
+    m_AngularAcceleration = m_MomentOfIntertia * m_Torque;
+
+    m_AngularDisplacement += m_AngularVelocity * ts + m_AngularAcceleration * 0.5f * ts * ts;
+    m_AngularVelocity += m_AngularAcceleration * ts;
+
+
+    m_Rotation = Rotation().FromEulerAngles(0, 0, m_AngularDisplacement);
+
+    // Calculate the unbalanced force on the car
+    m_Thrust = m_Rotation * Point({1, 0, 0}) * m_EngineForce * Input::GetButtonPress(); // thrust acts in the direction that the car is turning
+    m_DragForce = m_Velocity * (m_OnTrack ? m_TrackCoefficient : m_OffTrackCoefficient); // model drag as directly proportional to velocity
+    m_UnbalancedForce = m_Thrust - m_DragForce;
+
+    m_Acceleration = m_UnbalancedForce / m_Mass;
     
-    // point the car in the direction of the angular displacement
-    m_Velocity = Point({cos(m_AngularDisplacement), sin(m_AngularDisplacement), 1});
-    
-    // calculate the magnitude of the velocity
-    bool buttonPress = Input::GetButtonPress();
-    m_InputThreshold = Lerp(m_InputThreshold, buttonPress ? 1 : 0, ts * m_Acceleration);
-
-    m_Speed = m_InputThreshold * m_TopSpeed;
-
-    m_Position += m_Velocity * m_Speed * ts;
-    */
-
-
-    m_Thrust = m_EngineForce * Input::GetButtonPress();
-    m_DragForce = (m_OnTrack ? m_TrackCoefficient : m_OffTrackCoefficient) * m_Velocity.DotProduct(m_Velocity);
-
-    // ADD ANGULAR ACCELERATION
-    m_AngularVelocity = PI * (Input::GetAnalogueIn() - Input::AnalogueMid) / (float)Input::AnalogueMid;
-    m_AngularDisplacement += m_AngularVelocity * ts;
-
-    m_Force = Point({cos(m_AngularDisplacement), sin(m_AngularDisplacement), 1}) * (m_EngineForce - m_DragForce);
-
-    m_Acceleration = m_Force / m_Mass;
-    m_Velocity += m_Acceleration * ts;
     m_Position += m_Velocity * ts + m_Acceleration * ts * ts * 0.5f;
+    m_Velocity += m_Acceleration * ts;
 }
 
 void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
@@ -70,4 +86,9 @@ void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
     screenPos = Point({64 + screenPos.X(), 32 - screenPos.Y(), 0});
 
     display.fillRect(screenPos.X() - carWidth * 0.5f, screenPos.Y() - carLength * 0.5f, carWidth, carLength, INVERSE);
+}
+
+void Car::DebugLogKinematics()
+{
+    Serial << "Thrust: " << m_Thrust << " Drag: " << m_DragForce << " Fu: " << m_UnbalancedForce << endl;
 }

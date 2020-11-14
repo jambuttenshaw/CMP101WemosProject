@@ -26,41 +26,48 @@ public:
     void Draw(Adafruit_SSD1306& display, Camera& camera);
 private:
     void Init();
+    void DebugLogKinematics();
 
 private:
-/*
-    float m_TopSpeed = 25;
-    float m_Acceleration = 8;
 
-    Point m_Position;
-    Point m_Velocity;
+    // DYNAMICS ATTRIBUTES - MESS WITH THESE
 
-    float m_Speed = 0;
+    // how fast the car can go
+    float m_EngineForce = 50; 
 
-    float m_AngularDisplacement = -HALF_PI;
-    float m_AngularVelocity = 0;
+    // how quickly the car gets slowed down by friction
+    float m_TrackCoefficient = 2.5f;
+    float m_OffTrackCoefficient = 5;
 
-    float m_InputThreshold = 0.0f; // how much of the speed the input is letting through
-*/
-
-    float m_Thrust = 0;
-    float m_DragForce = 0;
-
-    float m_EngineForce = 25;
-
-    float m_TrackCoefficient = 15;
-    float m_OffTrackCoefficient = 20;
+    // steering attributes
+    float m_MaxWheelAngle = 30 * DEG_TO_RAD; // the wheels of the car can point a maximum of x degrees from the vertical
     
+    // physical attributes of the car
+    float m_Mass = 1;
+    float m_Radius = 1; // how far the steering wheels are from the center of gravity of the car
+
+
+    // MOTION OF THE CAR - DO NOT TOUCH
+    float m_WheelAngle = 0;
+    float m_TurnRadius = 0;
+    float m_CentripetalForce = 0;
+    float m_Torque = 0;
+    float m_MomentOfIntertia = 0;
+
+
     float m_AngularAcceleration = 0;
     float m_AngularVelocity = 0;
     float m_AngularDisplacement = -HALF_PI;
 
-    float m_Mass = 1;
+    Point m_Thrust;
+    Point m_DragForce;
+    Point m_UnbalancedForce;
 
-    Point m_Force;
     Point m_Acceleration;
     Point m_Velocity;
     Point m_Position;
+
+    Rotation m_Rotation;
 
     Point m_InitialPos;
 
