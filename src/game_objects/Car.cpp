@@ -83,8 +83,6 @@ void Car::Update(Timestep ts)
     m_AngularDisplacement += m_AngularVelocity * ts + m_AngularAcceleration * 0.5f * ts * ts;
     m_AngularVelocity += m_AngularAcceleration * ts;
 
-    DebugLogKinematics();
-
     m_Rotation = Rotation().FromEulerAngles(0, 0, m_AngularDisplacement);
 
     // Calculate the unbalanced force on the car
@@ -104,10 +102,4 @@ void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
     screenPos = Point({64 + screenPos.X(), 32 - screenPos.Y(), 0});
 
     display.fillRect(screenPos.X() - carWidth * 0.5f, screenPos.Y() - carLength * 0.5f, carWidth, carLength, INVERSE);
-}
-
-void Car::DebugLogKinematics()
-{
-    Serial << "Wheel Angle: " << m_WheelAngle << " Turn Radius: " << m_TurnRadius << " F: " << m_CentripetalForce;
-    Serial << " Torque: " << m_Torque << " Angular Acceleration: " << m_AngularAcceleration << " Angular Velocity: " << m_AngularVelocity << endl;
 }
