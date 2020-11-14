@@ -44,28 +44,46 @@ void Car::Update(Timestep ts)
     float velocityMagnitude = m_Velocity.Magnitude();
 
 
-    // Calculate the angle that the front wheels are pointing in
+    // Calculate the angle that the front wheels are pointing in, between -max wheel angle and +wheel angle
     m_WheelAngle = m_MaxWheelAngle * ((float)(Input::GetAnalogueIn()) / (float)(Input::AnalogueMid) - 1);
     // calculate the radius of turn this wheel angle would produce at this speed
     m_TurnRadius = 0;
-    for (int i = 0; i < ceil(PI / m_WheelAngle); i++)
+    if (m_WheelAngle != 0) // dont divide by 0 kids
     {
-        m_TurnRadius += sin(i * m_WheelAngle);
+        for (int i = 0; i < ceil(PI / (m_WheelAngle < 0 ? -m_WheelAngle : m_WheelAngle)); i++)
+        {
+            m_TurnRadius += sin(i * m_WheelAngle);
+        }
+        m_TurnRadius *= 0.5f; // the actual turn radius is this value scaled by the velocity magnitude
+                              // however we dont do that right now as you shall see...
     }
-    m_TurnRadius *= 0.5f; // the actual turn radius is this value scaled by the velocity magnitude
-                          // however we dont do that right now as you shall see...
-
+    
     // calculate the centripetal force
     // F = (mv^2) / r
     // however, since we have not scaled r by the velocity magnitude as we should have:
     // F = mv / r
-    m_CentripetalForce = m_Mass * velocityMagnitude / m_TurnRadius;
-    m_Torque = m_CentripetalForce * m_Radius;
+    if (m_TurnRadius == 0)
+    {
+        m_CentripetalForce = 0;
+    }
+    else
+    {
+        m_CentripetalForce = m_Mass * velocityMagnitude / m_TurnRadius;
+    }
+
+    if (m_CentripetalForce > m_MaxTyreFriction)
+    {
+        m_CentripetalForce = m_MaxTyreFriction;
+    }
+
+    m_DragTorque = m_AngularDragCoefficient * m_AngularVelocity * m_Radius;
+    m_Torque = m_CentripetalForce * m_Radius - m_DragTorque;
     m_AngularAcceleration = m_MomentOfIntertia * m_Torque;
 
     m_AngularDisplacement += m_AngularVelocity * ts + m_AngularAcceleration * 0.5f * ts * ts;
     m_AngularVelocity += m_AngularAcceleration * ts;
 
+    DebugLogKinematics();
 
     m_Rotation = Rotation().FromEulerAngles(0, 0, m_AngularDisplacement);
 
@@ -90,5 +108,6 @@ void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
 
 void Car::DebugLogKinematics()
 {
-    Serial << "Thrust: " << m_Thrust << " Drag: " << m_DragForce << " Fu: " << m_UnbalancedForce << endl;
+    Serial << "Wheel Angle: " << m_WheelAngle << " Turn Radius: " << m_TurnRadius << " F: " << m_CentripetalForce;
+    Serial << " Torque: " << m_Torque << " Angular Acceleration: " << m_AngularAcceleration << " Angular Velocity: " << m_AngularVelocity << endl;
 }
