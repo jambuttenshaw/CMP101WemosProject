@@ -9,15 +9,15 @@ public:
 
 	void SetBrightness(uint8_t brightness);
 
-	uint8_t ReadButtons(void);
+	inline uint8_t ReadButtons(void) { return m_Module->readButtons(); }
 	
-    void DisplayText(const char *text);
-	void DisplayHex(uint8_t position, uint8_t hex);
-	void DisplayIntNum(unsigned long number, boolean leadingZeros = true);
-	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, boolean leadingZeros = true);
+    inline void DisplayText(const char *text) { m_Module->displayText(text); }
+	inline void DisplayHex(uint8_t position, uint8_t hex) { m_Module->displayHex(position, hex); }
+	inline void DisplayIntNum(unsigned long number, boolean leadingZeros = true) { m_Module->displayIntNum(number, leadingZeros); }
+	inline void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, boolean leadingZeros = true) { m_Module->DisplayDecNumNibble(numberUpper, numberLower, leadingZeros); }
 
-    void SetLEDs(uint16_t greenred);
-	void SetLED(uint8_t position, uint8_t value);
+    inline void SetLEDs(uint16_t greenred) { m_Module->setLEDs(greenred); }
+	inline void SetLED(uint8_t position, uint8_t value) {m_Module->setLED(position, value); }
 
 private:
     TM1638plus* m_Module;
