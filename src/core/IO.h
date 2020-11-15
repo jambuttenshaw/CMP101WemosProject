@@ -13,6 +13,9 @@ public:
     static void Init()
     {
         pinMode(BUTTON_PIN, INPUT_PULLUP);
+
+        // initialize the expansion board
+        s_IOBoard->Init();
     }
 
     // ANALOGUE INPUT
@@ -26,6 +29,10 @@ public:
     static bool GetButtonPress() { return !GetDigitalRead(BUTTON_PIN); }
 
     static bool GetDigitalRead(int pin) { return digitalRead(pin); }
+
+
+    // EXPANSION BOARD IO
+    // (essentially a wrapper to the TM1638plus functionality, but make it static)
 
 private:
     static IOBoardAPI* s_IOBoard;
