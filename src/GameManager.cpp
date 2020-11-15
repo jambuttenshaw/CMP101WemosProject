@@ -1,7 +1,7 @@
 #include "GameManager.h"
 
 #include "core/Timestep.h"
-#include "core/Input.h"
+#include "core/IO.h"
 
 #include <Geometry.h>
 
