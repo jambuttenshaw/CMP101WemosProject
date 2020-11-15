@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/IOAPI.h"
+#include "core/IOBoardAPI.h"
 
 #include <Arduino.h>
 
@@ -28,5 +28,5 @@ public:
     static bool GetDigitalRead(int pin) { return digitalRead(pin); }
 
 private:
-    static InputAPI* s_InputAPI;
+    static IOBoardAPI* s_IOBoard;
 };
