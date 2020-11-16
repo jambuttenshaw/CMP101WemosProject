@@ -33,12 +33,26 @@ public:
 
     // EXPANSION BOARD IO
     // (essentially a wrapper to the TM1638 functionality, but make it static)
-    inline static void SetLEDs(uint16_t values) { s_IOBoard->SetLEDs(values); }
+    inline static void SetLEDs(uint8_t values) { s_IOBoard->SetLEDs(values); }
+    inline static void SetLED(uint8_t pos, bool active) { s_IOBoard->SetLED(log2(pos), active); }
 
     inline static bool GetButton(uint8_t button) { return s_IOBoard->GetButton(button); }
     inline static uint8_t GetButtons() { return s_IOBoard->GetButtons(); }
 
 public:
+    // definitions specific to the IO module
+    static const bool ON = true;
+    static const bool OFF = false;
+
+    static const uint8_t LED1 = 1;
+    static const uint8_t LED2 = 2;
+    static const uint8_t LED3 = 4;
+    static const uint8_t LED4 = 8;
+    static const uint8_t LED5 = 16;
+    static const uint8_t LED6 = 32;
+    static const uint8_t LED7 = 64;
+    static const uint8_t LED8 = 128;
+
     static const uint8_t BUTTON1 = 0;
     static const uint8_t BUTTON2 = 1;
     static const uint8_t BUTTON3 = 2;
