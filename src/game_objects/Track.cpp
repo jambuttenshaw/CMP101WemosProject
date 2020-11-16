@@ -598,7 +598,7 @@ void Track::Draw(DrawMode mode, Adafruit_SSD1306& display, Camera& camera)
     switch(mode)
     {
     case(DrawMode::Lines):          DrawLines(display, camera); break;
-    case(DrawMode::Triangles):      DrawTriangles(display, camera); break;
+    case(DrawMode::Fill):      DrawTriangles(display, camera); break;
     case(DrawMode::Wireframe):      DrawWireframe(display, camera); break;
     }
 

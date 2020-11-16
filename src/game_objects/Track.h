@@ -16,7 +16,7 @@ public:
     enum DrawMode
     {
         Lines,
-        Triangles,
+        Fill,
         Wireframe
     };
 
