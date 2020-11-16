@@ -32,8 +32,22 @@ public:
 
 
     // EXPANSION BOARD IO
-    // (essentially a wrapper to the TM1638plus functionality, but make it static)
+    // (essentially a wrapper to the TM1638 functionality, but make it static)
     inline static void SetLEDs(uint16_t values) { s_IOBoard->SetLEDs(values); }
+
+    inline static bool GetButton(uint8_t button) { return s_IOBoard->GetButton(button); }
+    inline static uint8_t GetButtons() { return s_IOBoard->GetButtons(); }
+
+public:
+    static const uint8_t BUTTON1 = 0;
+    static const uint8_t BUTTON2 = 1;
+    static const uint8_t BUTTON3 = 2;
+    static const uint8_t BUTTON4 = 3;
+    static const uint8_t BUTTON5 = 4;
+    static const uint8_t BUTTON6 = 5;
+    static const uint8_t BUTTON7 = 6;
+    static const uint8_t BUTTON8 = 7;
+
 
 private:
     static IOBoardAPI* s_IOBoard;

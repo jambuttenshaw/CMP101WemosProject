@@ -37,6 +37,7 @@ void GameManager::Init()
 
     m_Track = new Track(initCarPos);
     m_Car = new Car(initCarPos);
+
 }
 
 void GameManager::Update()
