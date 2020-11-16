@@ -32,11 +32,12 @@ public:
 
 
     // EXPANSION BOARD IO
-    // (essentially a wrapper to the TM1638 functionality, but make it static)
+    // (essentially a wrapper to the TM1638 functionality, but make it static and add a little input formatting)
     inline static void SetLEDs(uint8_t values) { s_IOBoard->SetLEDs(values); }
     inline static void SetLED(uint8_t pos, bool active) { s_IOBoard->SetLED(log2(pos), active); }
 
     inline static bool GetButton(uint8_t button) { return s_IOBoard->GetButton(button); }
+    inline static uint8_t GetButtonAsByte(uint8_t button) { return s_IOBoard->GetButtonAsByte(button); }
     inline static uint8_t GetButtons() { return s_IOBoard->GetButtons(); }
 
 public:

@@ -19,11 +19,13 @@ public:
     void SetLEDs(uint8_t led) { m_Module->setLEDs(led); }
 
     uint8_t GetButtons() { return m_Module->getButtons(); }
-	bool GetButton(uint8_t button)
+	uint8_t GetButtonAsByte(uint8_t button)
 	{
 		uint8_t buttonBit = (uint8_t)1 << button;
-		return (GetButtons() & buttonBit) != 0;
+		return GetButtons() & buttonBit;
 	}
+	bool GetButton(uint8_t button) { return GetButtonAsByte(button) != 0; }
+		
 	
 private:
     TM1638* m_Module;
