@@ -45,7 +45,7 @@ void Car::Update(Timestep ts)
 
 
     // Calculate the angle that the front wheels are pointing in, between -max wheel angle and +wheel angle
-    m_WheelAngle = m_MaxWheelAngle * ((float)(Input::GetAnalogueIn()) / (float)(Input::AnalogueMid) - 1);
+    m_WheelAngle = m_MaxWheelAngle * ((float)(IO::GetAnalogueIn()) / (float)(IO::AnalogueMid) - 1);
     // calculate the radius of turn this wheel angle would produce at this speed
     m_TurnRadius = 0;
     if (m_WheelAngle != 0) // dont divide by 0 kids
@@ -86,7 +86,7 @@ void Car::Update(Timestep ts)
     m_Rotation = Rotation().FromEulerAngles(0, 0, m_AngularDisplacement);
 
     // Calculate the unbalanced force on the car
-    m_Thrust = m_Rotation * Point({1, 0, 0}) * m_EngineForce * Input::GetButtonPress(); // thrust acts in the direction that the car is turning
+    m_Thrust = m_Rotation * Point({1, 0, 0}) * m_EngineForce * IO::GetButtonPress(); // thrust acts in the direction that the car is turning
     m_DragForce = m_Velocity * (m_OnTrack ? m_TrackCoefficient : m_OffTrackCoefficient); // model drag as directly proportional to velocity
     m_UnbalancedForce = m_Thrust - m_DragForce;
 

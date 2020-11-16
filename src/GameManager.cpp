@@ -27,7 +27,7 @@ void GameManager::Init()
     m_Display->display();
 
     // initialize
-    Input::Init();
+    IO::Init();
 
     Point initCarPos = Point({0, 0, 0});
 
