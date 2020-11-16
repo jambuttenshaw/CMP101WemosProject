@@ -2,6 +2,8 @@
 
 #include "core/MathsUtility.h"
 
+#include <Streaming.h>
+
 Track::Track()
     : m_TrackTranslation(Point()), m_TrackRotation(Rotation())
 {
@@ -597,7 +599,10 @@ void Track::Draw(DrawMode mode, Adafruit_SSD1306& display, Camera& camera)
     {
     case(DrawMode::Lines):          DrawLines(display, camera); break;
     case(DrawMode::Triangles):      DrawTriangles(display, camera); break;
+    case(DrawMode::Wireframe):      DrawWireframe(display, camera); break;
     }
+
+    Serial << "Error: Unkown draw mode!" << endl;
 }
 
 void Track::DrawLines(Adafruit_SSD1306& display, Camera& camera)
@@ -633,5 +638,27 @@ void Track::DrawTriangles(Adafruit_SSD1306& display, Camera& camera)
         p3 = Point({64 + p3.X(), 32 - p3.Y(), 0});
 
         display.fillTriangle(p1.X(), p1.Y(), p2.X(), p2.Y(), p3.X(), p3.Y(), WHITE);
+    }
+}
+
+void Track::DrawWireframe(Adafruit_SSD1306& display, Camera& camera)
+{
+    // the number of lines is half the number of indices
+    int numIndices = sizeof(m_TrackAreaIndices) / sizeof(unsigned int);
+
+    for (int i = 0; i < numIndices; i += 3)
+    {
+        Point p1 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackAreaIndices[i]]), camera.GetPosition(), camera.GetRotation());
+        Point p2 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackAreaIndices[i + 1]]), camera.GetPosition(), camera.GetRotation());
+        Point p3 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackAreaIndices[i + 2]]), camera.GetPosition(), camera.GetRotation());
+
+        p1 = Point({64 + p1.X(), 32 - p1.Y(), 0});
+        p2 = Point({64 + p2.X(), 32 - p2.Y(), 0});
+        p3 = Point({64 + p3.X(), 32 - p3.Y(), 0});
+
+        display.drawLine(p1.X(), p1.Y(), p2.X(), p2.Y(), WHITE);
+        display.drawLine(p1.X(), p1.Y(), p3.X(), p3.Y(), WHITE);
+        display.drawLine(p2.X(), p2.Y(), p3.X(), p3.Y(), WHITE);
+
     }
 }

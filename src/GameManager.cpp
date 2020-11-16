@@ -64,7 +64,7 @@ void GameManager::Draw()
 {
     m_Display->clearDisplay();
 
-    m_Track->Draw(Track::DrawMode::Triangles, *m_Display, *m_Camera);
+    m_Track->Draw(Track::DrawMode::Fill, *m_Display, *m_Camera);
     m_Car->Draw(*m_Display, *m_Camera);
 
     m_Display->display();
