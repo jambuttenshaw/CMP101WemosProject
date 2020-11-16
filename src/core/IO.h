@@ -4,7 +4,6 @@
 
 #include <Arduino.h>
 
-#define BUTTON_PIN D3
 #define ANALOGUE_PIN A0
 
 class IO
@@ -12,8 +11,6 @@ class IO
 public:
     inline static void Init()
     {
-        pinMode(BUTTON_PIN, INPUT_PULLUP);
-
         // initialize the expansion board
         s_IOBoard->Init();
     }
@@ -23,13 +20,6 @@ public:
     const static int AnalogueMax = 1024;
     const static int AnalogueMin = 0;
     const static int AnalogueMid = (AnalogueMax - AnalogueMin) / 2;
-    
-
-    // DIGITAL READING FROM BUTTON
-    inline static bool GetButtonPress() { return !GetDigitalRead(BUTTON_PIN); }
-
-    inline static bool GetDigitalRead(int pin) { return digitalRead(pin); }
-
 
     // EXPANSION BOARD IO
     // (essentially a wrapper to the TM1638 functionality, but make it static and add a little input formatting)
@@ -39,6 +29,11 @@ public:
     inline static bool GetButton(uint8_t button) { return s_IOBoard->GetButton(button); }
     inline static uint8_t GetButtonAsByte(uint8_t button) { return s_IOBoard->GetButtonAsByte(button); }
     inline static uint8_t GetButtons() { return s_IOBoard->GetButtons(); }
+
+    inline static void SetDisplayToHexNumber(unsigned long number, uint8_t dots, bool leadingZeros = true) { s_IOBoard->SetDisplayToHexNumber(number, dots, leadingZeros); }
+    inline static void SetDisplayToDecNumber(unsigned long number, uint8_t dots, bool leadingZeros = true) { s_IOBoard->SetDisplayToDecNumber(number, dots, leadingZeros); }
+    inline static void SetDisplayToSignedDecNumber(signed long number, uint8_t dots, bool leadingZeros = true) { s_IOBoard->SetDisplayToSignedDecNumber(number, dots, leadingZeros); }
+    inline static void SetDisplayToBinNumber(uint8_t number, uint8_t dots) { s_IOBoard->SetDisplayToBinNumber(number, dots); }
 
 public:
     // definitions specific to the IO module

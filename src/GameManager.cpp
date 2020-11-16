@@ -47,6 +47,8 @@ void GameManager::Update()
     Timestep dt((float)(newTime - m_LastFrameTime) / 1000.0f);
     m_LastFrameTime = newTime;
 
+    IO::SetLEDs(IO::GetButtons());
+
     // pre-update settings
     // we need the car to know if it is on the track
     bool carOnTrack = m_Track->PointOnTrack(m_Car->GetPosition());
@@ -58,6 +60,8 @@ void GameManager::Update()
 
     m_Camera->SetPosition(m_CameraOffset - m_Car->GetPosition());
     m_Camera->SetRotation(HALF_PI - m_Car->GetAngularDisplacement());
+
+    IO::SetDisplayToDecNumber(m_LastFrameTime / 1000, 0);
 }
 
 void GameManager::Draw()
