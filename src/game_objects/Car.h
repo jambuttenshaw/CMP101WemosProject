@@ -33,17 +33,17 @@ private:
     // DYNAMICS ATTRIBUTES - MESS WITH THESE
 
     // how fast the car can go
-    float m_EngineForce = 70; 
+    float m_EngineForce = 75; 
 
     // how quickly the car gets slowed down by friction
-    float m_TrackCoefficient = 2;
+    float m_TrackCoefficient = 1.5f;
     float m_OffTrackCoefficient = 5;
 
     float m_AngularDragCoefficient = 5;
 
     // steering attributes
     float m_MaxWheelAngle = 15 * DEG_TO_RAD; // the wheels of the car can point a maximum of x degrees from the vertical
-    float m_MaxTyreFriction = 6;
+    float m_MaxTyreFriction = 5;
     
     // physical attributes of the car
     float m_Mass = 1;

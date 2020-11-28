@@ -94,6 +94,13 @@ void Car::Update(Timestep ts)
     
     m_Position += m_Velocity * ts + m_Acceleration * ts * ts * 0.5f;
     m_Velocity += m_Acceleration * ts;
+
+    Serial << "Centripetal Force: " << m_CentripetalForce;
+    Serial << " Torque: " << m_Torque;
+    Serial << " Angular Acceleration: " << m_AngularAcceleration;
+    Serial << " Angular Velocity: " << m_AngularVelocity;
+    Serial << endl;
+
 }
 
 void Car::Draw(Adafruit_SSD1306& display, Camera& camera)
