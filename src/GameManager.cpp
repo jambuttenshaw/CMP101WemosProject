@@ -61,7 +61,10 @@ void GameManager::Update()
     m_Camera->SetPosition(m_CameraOffset - m_Car->GetPosition());
     m_Camera->SetRotation(HALF_PI - m_Car->GetAngularDisplacement());
 
-    IO::SetDisplayToDecNumber(m_LastFrameTime / 1000, 0);
+    // DISPLAY THE LAP TIME ON THE 7 SEGMENT DISPLAY
+
+
+    IO::SetDisplayToSignedDecNumber(-((int)(m_LastFrameTime * 0.001) % 60), 0, false);
 }
 
 void GameManager::Draw()

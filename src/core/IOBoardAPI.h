@@ -1,14 +1,12 @@
 #pragma once
 
 #include <Streaming.h>
-#include <TM1638.h>
+#include "TM1638Extended.h"
 
 class IOBoardAPI
 {
 public:
     void Init();
-
-	void SetBrightness(uint8_t brightness);
 
     void SetDisplayToHexNumber(unsigned long number, uint8_t dots, bool leadingZeros = true) { m_Module->setDisplayToHexNumber(number, dots, leadingZeros); }
     void SetDisplayToDecNumber(unsigned long number, uint8_t dots, bool leadingZeros = true) { m_Module->setDisplayToDecNumber(number, dots, leadingZeros); }
