@@ -77,6 +77,9 @@ void GameManager::Update()
     m_Camera->SetRotation(HALF_PI - m_Car->GetAngularDisplacement());
 
     
+    if (IO::GetButton(IO::BUTTON8))
+        Clock::Reset();
+
     // add minutes onto the 7 segment display
     uint8_t minutes = Clock::GetElapsedMinutes();
     if (minutes < 10)
