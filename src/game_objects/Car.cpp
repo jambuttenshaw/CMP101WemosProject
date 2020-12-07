@@ -86,7 +86,7 @@ void Car::Update(Timestep ts)
     m_Rotation = Rotation().FromEulerAngles(0, 0, m_AngularDisplacement);
 
     // Calculate the unbalanced force on the car
-    m_Thrust = m_Rotation * Point({1, 0, 0}) * m_EngineForce * (int)IO::GetButton(IO::BUTTON5); // thrust acts in the direction that the car is turning
+    m_Thrust = m_Rotation * Point({1, 0, 0}) * m_EngineForce * (int)IO::GetButton(IO::BUTTON1); // thrust acts in the direction that the car is turning
     m_DragForce = m_Velocity * (m_OnTrack ? m_TrackCoefficient : m_OffTrackCoefficient); // model drag as directly proportional to velocity
     m_UnbalancedForce = m_Thrust - m_DragForce;
 
