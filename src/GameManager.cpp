@@ -38,6 +38,11 @@ void GameManager::Init()
     m_Track = new Track(initCarPos);
     m_Car = new Car(initCarPos);
 
+
+    // we always want a dot between the seconds and minutes
+    // which will be the second dot
+    IO::SetDotActive(2);
+
 }
 
 void GameManager::Update()
@@ -60,6 +65,10 @@ void GameManager::Update()
 
     m_Camera->SetPosition(m_CameraOffset - m_Car->GetPosition());
     m_Camera->SetRotation(HALF_PI - m_Car->GetAngularDisplacement());
+
+    IO::SetPositionsToString(0, "LAP 0000");
+
+    IO::SetDisplayToString();
 }
 
 void GameManager::Draw()

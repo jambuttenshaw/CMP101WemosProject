@@ -12,6 +12,7 @@ public:
     void SetDisplayToDecNumber(unsigned long number, uint8_t dots, bool leadingZeros = true) { m_Module->setDisplayToDecNumber(number, dots, leadingZeros); }
     void SetDisplayToSignedDecNumber(signed long number, uint8_t dots, bool leadingZeros = true) { m_Module->setDisplayToSignedDecNumber(number, dots, leadingZeros); }
     void SetDisplayToBinNumber(uint8_t number, uint8_t dots) { m_Module->setDisplayToBinNumber(number, dots); }
+    void SetDisplayToString(const char* string, const word dots, const byte pos) { m_Module->setDisplayToString(string, dots, pos); }
 
     void SetLED(uint8_t pos, bool active) { m_Module->setLED(active ? TM1638_COLOR_RED : TM1638_COLOR_NONE, pos); }
     void SetLEDs(uint8_t led) { m_Module->setLEDs(led); }

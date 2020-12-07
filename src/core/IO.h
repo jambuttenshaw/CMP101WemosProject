@@ -35,6 +35,19 @@ public:
     inline static void SetDisplayToSignedDecNumber(signed long number, uint8_t dots, bool leadingZeros = true) { s_IOBoard->SetDisplayToSignedDecNumber(number, dots, leadingZeros); }
     inline static void SetDisplayToBinNumber(uint8_t number, uint8_t dots) { s_IOBoard->SetDisplayToBinNumber(number, dots); }
 
+    inline static void SetPositionToCharacter(uint8_t pos, char character) { s_7SegString[pos] = character; }
+    inline static void SetPositionsToString(uint8_t startPos, std::string characters)
+    {
+        for (int i = startPos; i < 8; i++)
+        {
+            s_7SegString[i] = characters[i - startPos];
+        }
+    }
+    inline static void SetDotActive(uint8_t pos) { s_7SegDots |= 1 << pos; Serial << s_7SegDots << endl; }
+    inline static void SetDotInactive(uint8_t pos) { s_7SegDots &= ~(1 << pos); }
+    inline static void SetDots(uint16_t dots) { s_7SegDots = dots; }
+    inline static void SetDisplayToString() { s_IOBoard->SetDisplayToString(s_7SegString, s_7SegDots, 0); }
+
 public:
     // definitions specific to the IO module
     static const bool ON = true;
@@ -61,4 +74,7 @@ public:
 
 private:
     static IOBoardAPI* s_IOBoard;
+
+    static char s_7SegString[];
+    static uint16_t s_7SegDots;
 };
