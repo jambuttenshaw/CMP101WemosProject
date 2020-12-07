@@ -3,7 +3,10 @@
 #include "core/Timestep.h"
 #include "core/IO.h"
 
+#include "core/Clock.h"
+
 #include <Geometry.h>
+#include <string>
 
 GameManager::GameManager()
 {
@@ -28,6 +31,11 @@ void GameManager::Init()
 
     // initialize
     IO::Init();
+    Clock::Init();
+
+
+
+    // initialize game objects
 
     Point initCarPos = Point({0, 0, 0});
 
@@ -42,6 +50,8 @@ void GameManager::Init()
     // we always want a dot between the seconds and minutes
     // which will be the second dot
     IO::SetDotActive(2);
+    // we always want the first 3 digits to read "LAP"
+    IO::SetPositionsToString(0, "LAP ");
 
 }
 
@@ -66,7 +76,20 @@ void GameManager::Update()
     m_Camera->SetPosition(m_CameraOffset - m_Car->GetPosition());
     m_Camera->SetRotation(HALF_PI - m_Car->GetAngularDisplacement());
 
-    IO::SetPositionsToString(0, "LAP 0000");
+    
+    // add minutes onto the 7 segment display
+    uint8_t minutes = Clock::GetElapsedMinutes();
+    if (minutes < 10)
+        IO::SetPositionsToString(5, String(minutes));
+    else
+        IO::SetPositionsToString(4, String(minutes));
+
+    // add seconds onto the 7 segment display
+    uint8_t seconds = Clock::GetElapsedSeconds();
+    if (seconds < 10)
+        IO::SetPositionsToString(7, String(seconds));
+    else
+        IO::SetPositionsToString(6, String(seconds));
 
     IO::SetDisplayToString();
 }

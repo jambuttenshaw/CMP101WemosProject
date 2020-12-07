@@ -13,6 +13,11 @@ public:
     {
         // initialize the expansion board
         s_IOBoard->Init();
+
+        for (int i = 0; i < 8; i++)
+        {
+            s_7SegString[i] = 32;
+        }
     }
 
     // ANALOGUE INPUT
@@ -36,9 +41,10 @@ public:
     inline static void SetDisplayToBinNumber(uint8_t number, uint8_t dots) { s_IOBoard->SetDisplayToBinNumber(number, dots); }
 
     inline static void SetPositionToCharacter(uint8_t pos, char character) { s_7SegString[pos] = character; }
-    inline static void SetPositionsToString(uint8_t startPos, std::string characters)
+    inline static void SetPositionsToString(uint8_t startPos, String characters)
     {
-        for (int i = startPos; i < 8; i++)
+        int numChars = characters.length();
+        for (int i = startPos; i < min(8, startPos + numChars); i++)
         {
             s_7SegString[i] = characters[i - startPos];
         }
@@ -47,6 +53,15 @@ public:
     inline static void SetDotInactive(uint8_t pos) { s_7SegDots &= ~(1 << pos); }
     inline static void SetDots(uint16_t dots) { s_7SegDots = dots; }
     inline static void SetDisplayToString() { s_IOBoard->SetDisplayToString(s_7SegString, s_7SegDots, 0); }
+    inline static String GetDisplayString()
+    {
+        String displayString = "";
+        for (int i = 0; i < 8; i++)
+        {
+            displayString += s_7SegString[i];
+        }
+        return displayString;
+    }
 
 public:
     // definitions specific to the IO module
