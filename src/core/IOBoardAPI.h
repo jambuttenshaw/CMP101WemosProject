@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Streaming.h>
-#include "TM1638Extended.h"
+#include <TM1638.h>
 
 class IOBoardAPI
 {
