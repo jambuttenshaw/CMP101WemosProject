@@ -49,10 +49,14 @@ public:
             s_7SegString[i] = characters[i - startPos];
         }
     }
+
     inline static void SetDotActive(uint8_t pos) { s_7SegDots |= 1 << pos; Serial << s_7SegDots << endl; }
     inline static void SetDotInactive(uint8_t pos) { s_7SegDots &= ~(1 << pos); }
     inline static void SetDots(uint16_t dots) { s_7SegDots = dots; }
+
     inline static void SetDisplayToString() { s_IOBoard->SetDisplayToString(s_7SegString, s_7SegDots, 0); }
+    inline static void SetDisplayToString(const char* s, word d) { s_IOBoard->SetDisplayToString(s, d, 0); }
+
     inline static String GetDisplayString(uint8_t startChar = 0, uint8_t numChars = 8)
     {
         String displayString = "";
@@ -62,6 +66,19 @@ public:
         }
         return displayString;
     }
+
+    inline static void Deactivate()
+    { 
+        String empty = "        ";
+        SetDisplayToString(empty.c_str(), 0);
+        s_Active = false;
+    }
+    inline static void Activate()
+    {
+        SetDisplayToString();
+        s_Active = true;
+    }
+    inline static void ToggleActive() { s_Active ? Deactivate() : Activate(); }
 
 public:
     // definitions specific to the IO module
@@ -92,4 +109,6 @@ private:
 
     static char s_7SegString[];
     static uint16_t s_7SegDots;
+
+    static bool s_Active;
 };

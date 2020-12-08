@@ -125,6 +125,13 @@ void GameManager::Update()
         else 
         {
             m_DisplayingLastLapTime = Clock::GetElapsedSeconds() < m_DurationToDisplayLastLap;
+
+            m_FlashTimer += dt;
+            if (m_FlashTimer > m_FlashThreshold)
+            {
+                IO::ToggleActive();
+                m_FlashTimer = 0;
+            }
         }
         
     }

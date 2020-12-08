@@ -35,4 +35,6 @@ private:
     bool m_DisplayingLastLapTime = false;
 
     float m_DurationToDisplayLastLap = 5;
+    float m_FlashTimer = 0;
+    float m_FlashThreshold = 0.2f;
 };
