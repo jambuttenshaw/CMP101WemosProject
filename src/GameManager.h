@@ -29,4 +29,6 @@ private:
 
     Rotation m_DefaultCarRotation;
     Point m_CameraOffset;
+
+    bool m_MovedOff = false;
 };

@@ -51,7 +51,9 @@ void GameManager::Init()
     // which will be the second dot
     IO::SetDotActive(2);
     // we always want the first 3 digits to read "LAP"
-    IO::SetPositionsToString(0, "LAP ");
+    // the first 3 digits wont get overwritten
+    IO::SetPositionsToString(0, "LAP 0000");
+    IO::SetDisplayToString();
 
 }
 
@@ -76,29 +78,46 @@ void GameManager::Update()
     m_Camera->SetPosition(m_CameraOffset - m_Car->GetPosition());
     m_Camera->SetRotation(HALF_PI - m_Car->GetAngularDisplacement());
 
-
     // Check if the car has crossed the start/finish line
-    IO::SetLEDs(m_Track->CrossingFinishLine(m_Car->GetPosition()) ? 255 : 0);
-
+    if (m_Track->CrossingFinishLine(m_Car->GetPosition()) ? 255 : 0)
+    {
+        // car has just crossed the finish line
     
-    if (IO::GetButton(IO::BUTTON8))
-        Clock::Reset();
-
-    // add minutes onto the 7 segment display
-    uint8_t minutes = Clock::GetElapsedMinutes();
-    if (minutes < 10)
-        IO::SetPositionsToString(5, String(minutes));
+        // add more checcks to make sure the car has actually gone all the way around the track
+        if (m_MovedOff)
+        {
+            Clock::Reset();
+        }
+    }
     else
-        IO::SetPositionsToString(4, String(minutes));
+    {
+        // check to see if the car is leaving the start line for the first time
+        // in which case we should start the lap timer
+        if (!m_MovedOff)
+        {
+            m_MovedOff = true;
+            Clock::Reset();
+        }
+    }
 
-    // add seconds onto the 7 segment display
-    uint8_t seconds = Clock::GetElapsedSeconds();
-    if (seconds < 10)
-        IO::SetPositionsToString(7, String(seconds));
-    else
-        IO::SetPositionsToString(6, String(seconds));
+    if (m_MovedOff)
+    {
+        // add minutes onto the 7 segment display
+        uint8_t minutes = Clock::GetElapsedMinutes();
+        if (minutes < 10)
+            IO::SetPositionsToString(4, "0" + String(minutes));
+        else
+            IO::SetPositionsToString(4, String(minutes));
 
-    IO::SetDisplayToString();
+        // add seconds onto the 7 segment display
+        uint8_t seconds = Clock::GetElapsedSeconds();
+        if (seconds < 10)
+            IO::SetPositionsToString(6, "0" + String(seconds));
+        else
+            IO::SetPositionsToString(6, String(seconds));
+
+        IO::SetDisplayToString();
+    }
 }
 
 void GameManager::Draw()
