@@ -22,6 +22,7 @@ public:
 
     // ANALOGUE INPUT
     inline static int GetAnalogueIn(int pin = ANALOGUE_PIN) { return analogRead(pin); }
+    inline static float GetAnalogueInNormalized(int pin = ANALOGUE_PIN) { return (float)analogRead(pin) / (float)AnalogueMax; }
     const static int AnalogueMax = 1024;
     const static int AnalogueMin = 0;
     const static int AnalogueMid = (AnalogueMax - AnalogueMin) / 2;

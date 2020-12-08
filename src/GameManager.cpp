@@ -5,6 +5,8 @@
 
 #include "core/Clock.h"
 
+#include "core/ServoIO.h"
+
 #include <Geometry.h>
 #include <string>
 
@@ -32,6 +34,7 @@ void GameManager::Init()
     // initialize
     IO::Init();
     Clock::Init();
+    ServoIO::Init();
 
 
 
