@@ -47,6 +47,7 @@ private:
     void DrawLines(Adafruit_SSD1306& display, Camera& camera);
     void DrawTriangles(Adafruit_SSD1306& display, Camera& camera);
     void DrawWireframe(Adafruit_SSD1306& display, Camera& camera);
+    void DrawFinishLine(Adafruit_SSD1306& display, Camera& camera);
 
     void CreateTrack();
 

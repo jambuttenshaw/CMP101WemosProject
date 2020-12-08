@@ -539,12 +539,15 @@ void Track::Draw(DrawMode mode, Adafruit_SSD1306& display, Camera& camera)
 {
     switch(mode)
     {
-    case(DrawMode::Lines):          DrawLines(display, camera); return;
-    case(DrawMode::Fill):      DrawTriangles(display, camera); return;
-    case(DrawMode::Wireframe):      DrawWireframe(display, camera); return;
+    case(DrawMode::Lines):          DrawLines(display, camera); break;
+    case(DrawMode::Fill):           DrawTriangles(display, camera); break;
+    case(DrawMode::Wireframe):      DrawWireframe(display, camera); break;
+    default:                        Serial << "Error: Unkown draw mode!" << endl;
     }
 
-    Serial << "Error: Unkown draw mode!" << endl;
+    // Draw the start line
+    DrawFinishLine(display, camera);
+    
 }
 
 void Track::DrawLines(Adafruit_SSD1306& display, Camera& camera)
@@ -603,4 +606,15 @@ void Track::DrawWireframe(Adafruit_SSD1306& display, Camera& camera)
         display.drawLine(p2.X(), p2.Y(), p3.X(), p3.Y(), WHITE);
 
     }
+}
+
+void Track::DrawFinishLine(Adafruit_SSD1306& display, Camera& camera)
+{
+    Point p1 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_StartLineVertices[0]]), camera.GetPosition(), camera.GetRotation());
+    Point p2 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_StartLineVertices[1]]), camera.GetPosition(), camera.GetRotation());
+
+    p1 = Point({64 + p1.X(), 32 - p1.Y(), 0});
+    p2 = Point({64 + p2.X(), 32 - p2.Y(), 0});
+
+    display.drawLine(p1.X(), p1.Y(), p2.X(), p2.Y(), INVERSE);
 }
