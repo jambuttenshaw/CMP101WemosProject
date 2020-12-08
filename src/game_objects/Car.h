@@ -37,6 +37,8 @@ private:
     // how fast the car can go
     float m_EngineForce = 75; 
 
+    float m_ReverseCoefficient = 0.5f;
+
     // how quickly the car gets slowed down by friction
     float m_TrackCoefficient = 1.5f;
     float m_OffTrackCoefficient = 5;

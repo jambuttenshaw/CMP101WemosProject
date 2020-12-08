@@ -46,8 +46,18 @@ void Car::Update(Timestep ts)
     m_Speed = m_Velocity.Magnitude();
 
 
+    float engine = m_EngineForce * (int)IO::GetButton(IO::BUTTON1);
+    bool reversing = false;
+    if (IO::GetButton(IO::BUTTON2))
+    {
+        engine = -m_EngineForce * m_ReverseCoefficient;
+        reversing = true;
+    }
+
+
     // Calculate the angle that the front wheels are pointing in, between -max wheel angle and +wheel angle
-    m_WheelAngle = m_MaxWheelAngle * ((float)(IO::GetAnalogueIn()) / (float)(IO::AnalogueMid) - 1);
+    // if the car is reversing, then the steering will be inverted
+    m_WheelAngle = m_MaxWheelAngle * ((float)(IO::GetAnalogueIn()) / (float)(IO::AnalogueMid) - 1) * (reversing ? -1 : 1);
     // calculate the radius of turn this wheel angle would produce at this speed
     m_TurnRadius = 0;
     if (m_WheelAngle != 0) // dont divide by 0 kids
@@ -87,8 +97,8 @@ void Car::Update(Timestep ts)
 
     m_Rotation = Rotation().FromEulerAngles(0, 0, m_AngularDisplacement);
 
-    // Calculate the unbalanced force on the car
-    m_Thrust = m_Rotation * Point({1, 0, 0}) * m_EngineForce * (int)IO::GetButton(IO::BUTTON1); // thrust acts in the direction that the car is turning
+    // Calculate the unbalanced force on the car   
+    m_Thrust = m_Rotation * Point({1, 0, 0}) * engine; // thrust acts in the direction that the car is turning
     m_DragForce = m_Velocity * (m_OnTrack ? m_TrackCoefficient : m_OffTrackCoefficient); // model drag as directly proportional to velocity
     m_UnbalancedForce = m_Thrust - m_DragForce;
 

@@ -35,7 +35,7 @@ private:
     bool m_PassedHalfway = false;
     bool m_DisplayingLastLapTime = false;
 
-    float m_DurationToDisplayLastLap = 5;
+    float m_DurationToDisplayLastLap = 4;
     float m_FlashTimer = 0;
     float m_FlashThreshold = 0.3f;
 };
