@@ -46,6 +46,8 @@ void GameManager::Init()
     m_Track = new Track(initCarPos);
     m_Car = new Car(initCarPos);
 
+    m_Track->SetInitAngle(m_Car->GetPosition());
+
 
     // we always want a dot between the seconds and minutes
     // which will be the second dot

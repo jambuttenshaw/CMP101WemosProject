@@ -478,8 +478,19 @@ void Track::CreateTrack()
     m_TrackAreaIndices[223] = 37;
     m_TrackAreaIndices[224] = 38;
 
+    // calculate the centroid of the track
+    // the centroid is the average of all the vertices that make up the track
+    unsigned int numVertices = sizeof(m_TrackVertices) / sizeof(m_TrackVertices[0]);
+    for (int i = 0; i < numVertices; i++)
+    {
+        m_TrackCentroid += m_TrackVertices[i];
+    }
+    m_TrackCentroid /= numVertices;    
+
     m_FinishLine = m_TrackVertices[m_StartLineVertices[1]] - m_TrackVertices[m_StartLineVertices[0]];
     m_FinishLineLength = m_FinishLine.Magnitude();
+
+    m_InitAngle = 0;
 }
 
 void Track::Update(Timestep ts)
@@ -511,6 +522,12 @@ bool Track::CrossingFinishLine(Point p)
     return abs(dot - m_FinishLineLength) < m_CrossingLineThreshold;
 }
 
+void Track::SetInitAngle(Point p)
+{
+    // get line from centroid to point
+    Point v = p - m_TrackCentroid;
+    m_InitAngle = atan(v.Y() / v.X());
+}
 
 void Track::Draw(Adafruit_SSD1306& display, Camera& camera)
 {

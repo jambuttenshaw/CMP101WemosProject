@@ -42,6 +42,8 @@ public:
 
     bool CrossingFinishLine(Point p);
 
+    void SetInitAngle(Point p);
+
 private:
     void DrawLines(Adafruit_SSD1306& display, Camera& camera);
     void DrawTriangles(Adafruit_SSD1306& display, Camera& camera);
@@ -57,6 +59,8 @@ private:
     unsigned int m_TrackEdgeIndices[150]; // an array of indices that define how the points that make up the track should be joined together
     unsigned int m_TrackAreaIndices[225]; // an array of indices that define the area that the track covers, for checking when the car is on or off the track
 
+    Point m_TrackCentroid;
+
     unsigned int m_StartLineVertices[2] = {0, 37};
 
     Point m_FinishLine;
@@ -65,4 +69,6 @@ private:
 
     Point m_TrackTranslation;
     Rotation m_TrackRotation;
+
+    float m_InitAngle;
 };
