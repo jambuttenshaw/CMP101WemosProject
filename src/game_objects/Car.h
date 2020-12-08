@@ -17,6 +17,8 @@ public:
     inline void Translate(Point translation) { m_Position += translation; }
 
     inline Point GetPosition() { return m_Position; }
+    inline float GetSpeed() { return m_Speed; }
+    inline float GetSpeedNormalized() { return m_Speed / m_MaxSpeed; }
 
     inline float GetAngularDisplacement() { return m_AngularDisplacement; }
 
@@ -50,6 +52,8 @@ private:
     float m_Radius = 1; // how far the steering wheels are from the center of gravity of the car
 
 
+    float m_MaxSpeed = 0;
+
     // MOTION OF THE CAR - DO NOT TOUCH
     float m_WheelAngle = 0;
     float m_TurnRadius = 0;
@@ -69,6 +73,7 @@ private:
 
     Point m_Acceleration;
     Point m_Velocity;
+    float m_Speed = 0;
     Point m_Position;
 
     Rotation m_Rotation;

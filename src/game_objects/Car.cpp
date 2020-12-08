@@ -32,6 +32,8 @@ void Car::Init()
     m_Velocity = Point();
     m_Position = m_InitialPos;
 
+    m_MaxSpeed = m_EngineForce / m_TrackCoefficient;
+
     m_Rotation = Rotation();
 
     // I = mr^2
@@ -41,7 +43,7 @@ void Car::Init()
 void Car::Update(Timestep ts)
 {
     // magnitude is expensive to compute, so well make sure to only do it once each frame
-    float velocityMagnitude = m_Velocity.Magnitude();
+    m_Speed = m_Velocity.Magnitude();
 
 
     // Calculate the angle that the front wheels are pointing in, between -max wheel angle and +wheel angle
@@ -68,7 +70,7 @@ void Car::Update(Timestep ts)
     }
     else
     {
-        m_CentripetalForce = m_Mass * velocityMagnitude / m_TurnRadius;
+        m_CentripetalForce = m_Mass * m_Speed / m_TurnRadius;
     }
 
     if (m_CentripetalForce > m_MaxTyreFriction)

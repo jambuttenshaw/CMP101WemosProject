@@ -143,6 +143,9 @@ void GameManager::Update()
         }
         
     }
+
+    ServoIO::Write(180 * (1 - m_Car->GetSpeedNormalized()));
+
 }
 
 void GameManager::Draw()
