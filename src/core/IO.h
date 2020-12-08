@@ -53,10 +53,10 @@ public:
     inline static void SetDotInactive(uint8_t pos) { s_7SegDots &= ~(1 << pos); }
     inline static void SetDots(uint16_t dots) { s_7SegDots = dots; }
     inline static void SetDisplayToString() { s_IOBoard->SetDisplayToString(s_7SegString, s_7SegDots, 0); }
-    inline static String GetDisplayString()
+    inline static String GetDisplayString(uint8_t startChar = 0, uint8_t numChars = 8)
     {
         String displayString = "";
-        for (int i = 0; i < 8; i++)
+        for (int i = startChar; i < min(8, startChar + numChars); i++)
         {
             displayString += s_7SegString[i];
         }

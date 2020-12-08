@@ -30,5 +30,9 @@ private:
     Rotation m_DefaultCarRotation;
     Point m_CameraOffset;
 
+    // bools to control the state of the game
     bool m_MovedOff = false;
+    bool m_DisplayingLastLapTime = false;
+
+    float m_DurationToDisplayLastLap = 5;
 };

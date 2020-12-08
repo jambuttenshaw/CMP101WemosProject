@@ -21,14 +21,21 @@ public:
         int8_t elapsedSeconds = GetSecond() - s_StartSecond;
         
         if (elapsedSeconds < 0)
+        {
             elapsedSeconds += 60;
+            s_MinuteAdjustment = 1;
+        }
+        else
+        {
+            s_MinuteAdjustment = 0;
+        }
 
         return (uint8_t)elapsedSeconds;
     }
 
     inline static uint8_t GetElapsedMinutes()
     {
-        int8_t elapsedMinutes = GetMinute() - s_StartMinute;
+        int8_t elapsedMinutes = GetMinute() - s_StartMinute - s_MinuteAdjustment;
 
         if (elapsedMinutes < 0)
             elapsedMinutes += 60;
@@ -49,4 +56,5 @@ private:
     static uint8_t s_StartSecond;
     static uint8_t s_StartMinute;
 
+    static uint8_t s_MinuteAdjustment;
 };

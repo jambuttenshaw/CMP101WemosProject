@@ -87,6 +87,7 @@ void GameManager::Update()
         if (m_MovedOff)
         {
             Clock::Reset();
+            m_DisplayingLastLapTime = true;
         }
     }
     else
@@ -102,21 +103,30 @@ void GameManager::Update()
 
     if (m_MovedOff)
     {
-        // add minutes onto the 7 segment display
-        uint8_t minutes = Clock::GetElapsedMinutes();
-        if (minutes < 10)
-            IO::SetPositionsToString(4, "0" + String(minutes));
-        else
-            IO::SetPositionsToString(4, String(minutes));
+        if (!m_DisplayingLastLapTime)
+        {
+            // add minutes onto the 7 segment display
+            uint8_t minutes = Clock::GetElapsedMinutes();
+            if (minutes < 10)
+                IO::SetPositionsToString(4, "0" + String(minutes));
+            else
+                IO::SetPositionsToString(4, String(minutes));
 
-        // add seconds onto the 7 segment display
-        uint8_t seconds = Clock::GetElapsedSeconds();
-        if (seconds < 10)
-            IO::SetPositionsToString(6, "0" + String(seconds));
-        else
-            IO::SetPositionsToString(6, String(seconds));
-
-        IO::SetDisplayToString();
+            // add seconds onto the 7 segment display
+            uint8_t seconds = Clock::GetElapsedSeconds();
+            if (seconds < 10)
+                IO::SetPositionsToString(6, "0" + String(seconds));
+            else
+                IO::SetPositionsToString(6, String(seconds));
+            
+            
+            IO::SetDisplayToString();
+        }
+        else 
+        {
+            m_DisplayingLastLapTime = Clock::GetElapsedSeconds() < m_DurationToDisplayLastLap;
+        }
+        
     }
 }
 
