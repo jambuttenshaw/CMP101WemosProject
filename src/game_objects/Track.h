@@ -41,8 +41,7 @@ public:
     bool PointOnTrack(Point p);
 
     bool CrossingFinishLine(Point p);
-
-    void SetInitAngle(Point p);
+    bool AtAngularHalfway(Point p);
 
 private:
     void DrawLines(Adafruit_SSD1306& display, Camera& camera);
@@ -70,5 +69,6 @@ private:
     Point m_TrackTranslation;
     Rotation m_TrackRotation;
 
-    float m_InitAngle;
+    Point m_CentroidToStartLine;
+    float m_HalfwayThreshold = 0.05f;
 };

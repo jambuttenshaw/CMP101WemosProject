@@ -481,7 +481,7 @@ void Track::CreateTrack()
     // calculate the centroid of the track
     // the centroid is the average of all the vertices that make up the track
     unsigned int numVertices = sizeof(m_TrackVertices) / sizeof(m_TrackVertices[0]);
-    for (int i = 0; i < numVertices; i++)
+    for (unsigned int i = 0; i < numVertices; i++)
     {
         m_TrackCentroid += m_TrackVertices[i];
     }
@@ -490,7 +490,8 @@ void Track::CreateTrack()
     m_FinishLine = m_TrackVertices[m_StartLineVertices[1]] - m_TrackVertices[m_StartLineVertices[0]];
     m_FinishLineLength = m_FinishLine.Magnitude();
 
-    m_InitAngle = 0;
+    // get line from centroid to point
+    m_CentroidToStartLine = Normalize(m_TrackVertices[m_StartLineVertices[0]] - m_TrackCentroid);
 }
 
 void Track::Update(Timestep ts)
@@ -519,14 +520,14 @@ bool Track::CrossingFinishLine(Point p)
 {
     Point toPoint = Normalize(p - m_TrackVertices[m_StartLineVertices[0]]);
     float dot = toPoint.DotProduct(m_FinishLine);
-    return abs(dot - m_FinishLineLength) < m_CrossingLineThreshold;
+    return fabs(dot - m_FinishLineLength) < m_CrossingLineThreshold;
 }
 
-void Track::SetInitAngle(Point p)
+bool Track::AtAngularHalfway(Point p)
 {
-    // get line from centroid to point
-    Point v = p - m_TrackCentroid;
-    m_InitAngle = atan(v.Y() / v.X());
+    Point centroidToP = Normalize(p - m_TrackCentroid);
+    float dot = centroidToP.DotProduct(m_CentroidToStartLine);
+    return fabs(dot + 1) < m_HalfwayThreshold;
 }
 
 void Track::Draw(Adafruit_SSD1306& display, Camera& camera)

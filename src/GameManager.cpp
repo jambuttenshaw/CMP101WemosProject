@@ -46,9 +46,6 @@ void GameManager::Init()
     m_Track = new Track(initCarPos);
     m_Car = new Car(initCarPos);
 
-    m_Track->SetInitAngle(m_Car->GetPosition());
-
-
     // we always want a dot between the seconds and minutes
     // which will be the second dot
     IO::SetDotActive(2);
@@ -80,16 +77,22 @@ void GameManager::Update()
     m_Camera->SetPosition(m_CameraOffset - m_Car->GetPosition());
     m_Camera->SetRotation(HALF_PI - m_Car->GetAngularDisplacement());
 
+    if (!m_PassedHalfway)
+    {
+        m_PassedHalfway = m_Track->AtAngularHalfway(m_Car->GetPosition());
+    }
+
     // Check if the car has crossed the start/finish line
-    if (m_Track->CrossingFinishLine(m_Car->GetPosition()) ? 255 : 0)
+    if (m_Track->CrossingFinishLine(m_Car->GetPosition()))
     {
         // car has just crossed the finish line
     
         // add more checcks to make sure the car has actually gone all the way around the track
-        if (m_MovedOff)
+        if (m_MovedOff && m_PassedHalfway)
         {
             Clock::Reset();
             m_DisplayingLastLapTime = true;
+            m_PassedHalfway = false;
         }
     }
     else

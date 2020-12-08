@@ -32,9 +32,10 @@ private:
 
     // bools to control the state of the game
     bool m_MovedOff = false;
+    bool m_PassedHalfway = false;
     bool m_DisplayingLastLapTime = false;
 
-    float m_DurationToDisplayLastLap = 5;
+    float m_DurationToDisplayLastLap = 3;
     float m_FlashTimer = 0;
-    float m_FlashThreshold = 0.2f;
+    float m_FlashThreshold = 0.3f;
 };
