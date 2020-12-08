@@ -478,6 +478,8 @@ void Track::CreateTrack()
     m_TrackAreaIndices[223] = 37;
     m_TrackAreaIndices[224] = 38;
 
+    m_FinishLine = m_TrackVertices[m_StartLineVertices[1]] - m_TrackVertices[m_StartLineVertices[0]];
+    m_FinishLineLength = m_FinishLine.Magnitude();
 }
 
 void Track::Update(Timestep ts)
@@ -501,6 +503,14 @@ bool Track::PointOnTrack(Point p)
     }
     return false;
 }
+
+bool Track::CrossingFinishLine(Point p)
+{
+    Point toPoint = Normalize(p - m_TrackVertices[m_StartLineVertices[0]]);
+    float dot = toPoint.DotProduct(m_FinishLine);
+    return abs(dot - m_FinishLineLength) < m_CrossingLineThreshold;
+}
+
 
 void Track::Draw(Adafruit_SSD1306& display, Camera& camera)
 {

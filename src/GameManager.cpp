@@ -62,7 +62,7 @@ void GameManager::Update()
     Timestep dt((float)(newTime - m_LastFrameTime) / 1000.0f);
     m_LastFrameTime = newTime;
 
-    IO::SetLEDs(IO::GetButtons());
+    // IO::SetLEDs(IO::GetButtons());
 
     // pre-update settings
     // we need the car to know if it is on the track
@@ -75,6 +75,10 @@ void GameManager::Update()
 
     m_Camera->SetPosition(m_CameraOffset - m_Car->GetPosition());
     m_Camera->SetRotation(HALF_PI - m_Car->GetAngularDisplacement());
+
+
+    // Check if the car has crossed the start/finish line
+    IO::SetLEDs(m_Track->CrossingFinishLine(m_Car->GetPosition()) ? 255 : 0);
 
     
     if (IO::GetButton(IO::BUTTON8))
