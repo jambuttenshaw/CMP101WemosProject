@@ -141,9 +141,8 @@ void GameManager::Update()
     bool carOnTrack = m_Track->PointOnTrack(m_Car->GetPosition());
     m_Car->SetOnTrack(carOnTrack);
 
-    // update the game objects
+    // update the car
     m_Car->Update(dt);
-    m_Track->Update(dt);
 
     // we want to position the camera to always keep the car in the centre of the screen
 

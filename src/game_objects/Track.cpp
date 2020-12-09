@@ -4,12 +4,15 @@
 
 #include <Streaming.h>
 
+// default constructor
+// initialises pos and rot as 0
 Track::Track()
     : m_TrackTranslation(Point()), m_TrackRotation(Rotation())
 {
     CreateTrack();
 }
 
+// you can initialise the track with a position too
 Track::Track(Point initialOffset)
     : m_TrackTranslation(initialOffset), m_TrackRotation(Rotation())
 {
@@ -24,6 +27,22 @@ Track::~Track()
 void Track::CreateTrack()
 {
     // create the track
+
+    /*
+
+    These values were not inputted by hand (thankfully).
+
+    I built a track geometry generation tool in Unity that exports the C++ code below
+    You can view this track builder tool at https://github.com/jambuttenshaw/WemosTrackBuilder
+
+    It allows me to click and drag the vertices of the track, and once I am happy with the layout
+    it works out how the vertices should be joined together in order to draw the edges
+    and fill the area of the track.
+
+    */
+
+   // C# Script generated code below:
+
     m_TrackVertices[0] = Point({-34, 0, 0});
     m_TrackVertices[1] = Point({-34, 50, 0});
     m_TrackVertices[2] = Point({-34, 100, 0});
@@ -478,46 +497,70 @@ void Track::CreateTrack()
     m_TrackAreaIndices[223] = 37;
     m_TrackAreaIndices[224] = 38;
 
+    // End of C# script generated code
+
+
+
     // calculate the centroid of the track
     // the centroid is the average of all the vertices that make up the track
+    m_TrackCentroid = Point();
+    // calculate the number of vertices in the track
     unsigned int numVertices = sizeof(m_TrackVertices) / sizeof(m_TrackVertices[0]);
     for (unsigned int i = 0; i < numVertices; i++)
     {
+        // add this vertices position to the centroid
         m_TrackCentroid += m_TrackVertices[i];
     }
+    // to get the centroid we divide the sum of the vertices by the quantity
     m_TrackCentroid /= numVertices;    
 
+    // find the finish line vector
     m_FinishLine = m_TrackVertices[m_StartLineVertices[1]] - m_TrackVertices[m_StartLineVertices[0]];
+    // and its magnitude
     m_FinishLineLength = m_FinishLine.Magnitude();
 
-    // get line from centroid to point
+    // get direction vector from centroid to the start line
     m_CentroidToStartLine = Normalize(m_TrackVertices[m_StartLineVertices[0]] - m_TrackCentroid);
 }
 
-void Track::Update(Timestep ts)
-{
-
-}
 
 bool Track::PointOnTrack(Point p)
 {
+    // checks if the point P is on or off of the track
+
+    // since the track is constructed out of triangles,
+    // we can iterate through those triangles and check to see if the 
+    // point is inside the triangle
+    // if the point is inside any triangle then the car is on the track
+    // otherwise the car cannot be on the track
+
+    // get the number of triangle vertices that make up the track
     int triangleVertexCount = sizeof(m_TrackAreaIndices) / (sizeof(unsigned int));
     for (int i = 0; i < triangleVertexCount; i += 3)
     {
+        // get the vertices of the triangle
         Point v1 = m_TrackVertices[m_TrackAreaIndices[i]];
         Point v2 = m_TrackVertices[m_TrackAreaIndices[i + 1]];
         Point v3 = m_TrackVertices[m_TrackAreaIndices[i + 2]];
 
+        // check to see if the point is inside this triangle
         if (PointInsideTriangle(p, v1, v2, v3))
         {
+            // if it is, the point is on the track; return true
             return true;
         }
     }
+    // the point is not inside any of the triangles so we should return false
     return false;
 }
 
 bool Track::CrossingFinishLine(Point p)
 {
+    // check to see if the point is close enough to the finish line to be considered crossing it
+
+    // take the component of the finish line vector in the direction of the finish line to the point
+    // and if the difference between that length and the length of the finish line is less than our
+    // threshold, the point can be considered crossing the finish line
     Point toPoint = Normalize(p - m_TrackVertices[m_StartLineVertices[0]]);
     float dot = toPoint.DotProduct(m_FinishLine);
     return fabs(dot - m_FinishLineLength) < m_CrossingLineThreshold;
@@ -525,23 +568,43 @@ bool Track::CrossingFinishLine(Point p)
 
 bool Track::AtAngularHalfway(Point p)
 {
+    // checks if the angle between the start line and the point with respect to the centroid of the track is approximately pi.
+
+    // get the direction from the centroid to p
     Point centroidToP = Normalize(p - m_TrackCentroid);
+    // get the component of the centroid-to-start vector in the direction of the centroid-to-p vector
     float dot = centroidToP.DotProduct(m_CentroidToStartLine);
+    // if it is exactly halfway, dot would be -1, but we allow a small margin for error here
     return fabs(dot + 1) < m_HalfwayThreshold;
 }
 
 void Track::Draw(Adafruit_SSD1306& display, Camera& camera)
 {
+    // an overload of draw that uses the tracks stored default draw mode
     Draw(m_DrawMode, display, camera);
 }
 
 void Track::Draw(DrawMode mode, Adafruit_SSD1306& display, Camera& camera)
 {
+
+    /*
+    Normally, this sort of stuff would get done in parallel on a GPU
+    Unfortunately the Wemos can't do that.
+
+    Where on a regular computer, all of the vertices would be processed in parallel and it would
+    be super fast, we need to do them in series here.
+    */
+
+    // switch on the draw mode
     switch(mode)
     {
+    // draw the edges of the track
     case(DrawMode::Lines):          DrawLines(display, camera); break;
+    // draw the track as filled triangles
     case(DrawMode::Fill):           DrawTriangles(display, camera); break;
+    // draw the track as non-filled triangles
     case(DrawMode::Wireframe):      DrawWireframe(display, camera); break;
+    // just in case something goes wrong
     default:                        Serial << "Error: Unkown draw mode!" << endl;
     }
 
@@ -553,35 +616,60 @@ void Track::Draw(DrawMode mode, Adafruit_SSD1306& display, Camera& camera)
 void Track::DrawLines(Adafruit_SSD1306& display, Camera& camera)
 {
     // the number of lines is half the number of indices
+    // we need the number of indices first
     int numIndices = sizeof(m_TrackEdgeIndices) / sizeof(unsigned int);
 
+    // repeat for the number of edges
+    // where i is the current index
+    // there are 2 indices per edge, therefore we go up in increments of 2
     for (int i = 0; i < numIndices; i += 2)
     {
+        // get the 2 ends of the line
+
+        // the points are stored in model space at the moment
+        // they need to be transformed to screen space ultimately
+
+        // we want to apply the transform (rotation and translation) of the track
+        // followed inverse transform of the camera to get the point in world space
         Point p1 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i]]), camera.GetPosition(), camera.GetRotation());
         Point p2 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackEdgeIndices[i + 1]]), camera.GetPosition(), camera.GetRotation());
 
+        // and from world space we can use the dimensions of the screen to convert to screen space
         p1 = Point({64 + p1.X(), 32 - p1.Y(), 0});
         p2 = Point({64 + p2.X(), 32 - p2.Y(), 0});
 
+        // then draw this line onto the screen using the screen space coordinates
         display.drawLine(p1.X(), p1.Y(), p2.X(), p2.Y(), WHITE);
     }
 }
 
 void Track::DrawTriangles(Adafruit_SSD1306& display, Camera& camera)
 {
-    // the number of lines is half the number of indices
+    // get the number of indices in the triangles array
     int numIndices = sizeof(m_TrackAreaIndices) / sizeof(unsigned int);
 
+    // repeat for the number of triangles
+    // where i is the current vertex index
+    // there are 3 indices per triangle, therefore we go up in increments of 3
     for (int i = 0; i < numIndices; i += 3)
     {
+        // get the 3 vertices of the triangle
+
+        // the points are stored in model space at the moment
+        // they need to be transformed to screen space ultimately
+
+        // we want to apply the transform (rotation and translation) of the track
+        // followed inverse transform of the camera to get the point in world space
         Point p1 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackAreaIndices[i]]), camera.GetPosition(), camera.GetRotation());
         Point p2 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackAreaIndices[i + 1]]), camera.GetPosition(), camera.GetRotation());
         Point p3 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackAreaIndices[i + 2]]), camera.GetPosition(), camera.GetRotation());
 
+        // and from world space we can use the dimensions of the screen to convert to screen space
         p1 = Point({64 + p1.X(), 32 - p1.Y(), 0});
         p2 = Point({64 + p2.X(), 32 - p2.Y(), 0});
         p3 = Point({64 + p3.X(), 32 - p3.Y(), 0});
 
+        // then draw this triangle onto the screen using the screen space coordinates
         display.fillTriangle(p1.X(), p1.Y(), p2.X(), p2.Y(), p3.X(), p3.Y(), WHITE);
     }
 }
@@ -593,28 +681,39 @@ void Track::DrawWireframe(Adafruit_SSD1306& display, Camera& camera)
 
     for (int i = 0; i < numIndices; i += 3)
     {
+        // get the vertices of the triangle and transform them to world space using the tracks transform and the camera
         Point p1 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackAreaIndices[i]]), camera.GetPosition(), camera.GetRotation());
         Point p2 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackAreaIndices[i + 1]]), camera.GetPosition(), camera.GetRotation());
         Point p3 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_TrackAreaIndices[i + 2]]), camera.GetPosition(), camera.GetRotation());
 
+        // transform the points to screen space
         p1 = Point({64 + p1.X(), 32 - p1.Y(), 0});
         p2 = Point({64 + p2.X(), 32 - p2.Y(), 0});
         p3 = Point({64 + p3.X(), 32 - p3.Y(), 0});
 
+
+        // draw the edges of the triangle
+        // as each triangle will share edges with at most 1 neighbour,
+        // most edges will get drawn multiple times
+        // however since wireframe mode is only for debug purposes
+        // im not too bothered about optimizing it
         display.drawLine(p1.X(), p1.Y(), p2.X(), p2.Y(), WHITE);
         display.drawLine(p1.X(), p1.Y(), p3.X(), p3.Y(), WHITE);
         display.drawLine(p2.X(), p2.Y(), p3.X(), p3.Y(), WHITE);
-
     }
 }
 
 void Track::DrawFinishLine(Adafruit_SSD1306& display, Camera& camera)
 {
+    // get the edges of the finish line and transform them into world space using the tracks transform and the camera
     Point p1 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_StartLineVertices[0]]), camera.GetPosition(), camera.GetRotation());
     Point p2 = InverseTransformPoint(m_TrackTranslation + (m_TrackRotation * m_TrackVertices[m_StartLineVertices[1]]), camera.GetPosition(), camera.GetRotation());
 
+    // transform the vertices to screen space
     p1 = Point({64 + p1.X(), 32 - p1.Y(), 0});
     p2 = Point({64 + p2.X(), 32 - p2.Y(), 0});
 
+    // draw the finish line onto the screen
+    // use the inverse color as we want the finish line to stand out from the track
     display.drawLine(p1.X(), p1.Y(), p2.X(), p2.Y(), INVERSE);
 }
