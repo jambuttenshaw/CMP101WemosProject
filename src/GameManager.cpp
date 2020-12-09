@@ -18,7 +18,6 @@ GameManager::GameManager()
 GameManager::~GameManager()
 {
     // delete the objects we are pointing at
-    delete m_Display;
     delete m_Car;
     delete m_Track;
     delete m_Camera;
