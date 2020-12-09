@@ -154,6 +154,7 @@ void GameManager::Update()
     else if (m_DisplayingGo)
     {
         m_DisplayingGo = Clock::GetElapsedSeconds() < m_DurationToDisplayGo;
+        if (!m_DisplayingGo) IO::SetLEDs(0);
 
         m_FlashTimer += dt;
         if (m_FlashTimer > m_GoFlashThreshold)
