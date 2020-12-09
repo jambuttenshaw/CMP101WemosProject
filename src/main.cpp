@@ -9,8 +9,7 @@ void setup()   {
 
   delay(2000);
 
-  // do this right before the game loop starts
-  gameManager.SetClock();
+  gameManager.Countdown();
 }
 
 

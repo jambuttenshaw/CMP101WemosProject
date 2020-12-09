@@ -49,13 +49,55 @@ void GameManager::Init()
     m_Track = new Track(initCarPos);
     m_Car = new Car(initCarPos);
 
+
+}
+
+void GameManager::Countdown()
+{
+    // display the car and the track
+    Draw();
+
+    delay(1000);
+
+    // 3
+    IO::SetLEDs(IO::LED1 | IO::LED2);
+    IO::SetPositionsToString(0, "3 ");
+    IO::SetDisplayToString();
+
+    delay(1000);
+
+    // 2
+    IO::SetLEDs(IO::LED1 | IO::LED2 | IO::LED3 | IO::LED4);
+    IO::SetPositionsToString(2, "2 ");
+    IO::SetDisplayToString();
+
+    delay(1000);
+
+    // 1
+    IO::SetLEDs(IO::LED1 | IO::LED2 | IO::LED3 | IO::LED4 | IO::LED5 | IO::LED6);
+    IO::SetPositionsToString(4, "1 ");
+    IO::SetDisplayToString();
+
+    delay(1000);
+
+    // GO
+    IO::SetLEDs(255);
+    String text = "3 2 1 GO";
+    IO::SetDisplayToString(text.c_str(), 0);
+    m_DisplayingGo = true;
+
+    // start game loop
+
+    m_LastFrameTime = millis();
+    Clock::Reset();
+
     // we always want a dot between the seconds and minutes
     // which will be the second dot
     IO::SetDotActive(2);
     // we always want the first 3 digits to read "LAP"
     // the first 3 digits wont get overwritten
+    // we dont actually display this string yet since we still want to flash GO
     IO::SetPositionsToString(0, "LAP 0000");
-    IO::SetDisplayToString();
 }
 
 void GameManager::Update()
@@ -90,57 +132,62 @@ void GameManager::Update()
         // car has just crossed the finish line
     
         // add more checcks to make sure the car has actually gone all the way around the track
-        if (m_MovedOff && m_PassedHalfway)
+        if (m_PassedHalfway)
         {
             Clock::Reset();
             m_DisplayingLastLapTime = true;
             m_PassedHalfway = false;
         }
     }
-    else
+
+    if (m_DisplayingLastLapTime)
     {
-        // check to see if the car is leaving the start line for the first time
-        // in which case we should start the lap timer
-        if (!m_MovedOff)
+        m_DisplayingLastLapTime = Clock::GetElapsedSeconds() < m_DurationToDisplayLastLap;
+
+        m_FlashTimer += dt;
+        if (m_FlashTimer > m_LapTimeFlashThreshold)
         {
-            m_MovedOff = true;
-            Clock::Reset();
+            IO::ToggleActive();
+            m_FlashTimer = 0;
         }
     }
-
-    if (m_MovedOff)
+    else if (m_DisplayingGo)
     {
-        if (!m_DisplayingLastLapTime)
-        {
-            // add minutes onto the 7 segment display
-            uint8_t minutes = Clock::GetElapsedMinutes();
-            if (minutes < 10)
-                IO::SetPositionsToString(4, "0" + String(minutes));
-            else
-                IO::SetPositionsToString(4, String(minutes));
+        m_DisplayingGo = Clock::GetElapsedSeconds() < m_DurationToDisplayGo;
 
-            // add seconds onto the 7 segment display
-            uint8_t seconds = Clock::GetElapsedSeconds();
-            if (seconds < 10)
-                IO::SetPositionsToString(6, "0" + String(seconds));
-            else
-                IO::SetPositionsToString(6, String(seconds));
-            
-            
-            IO::SetDisplayToString();
-        }
-        else 
+        m_FlashTimer += dt;
+        if (m_FlashTimer > m_GoFlashThreshold)
         {
-            m_DisplayingLastLapTime = Clock::GetElapsedSeconds() < m_DurationToDisplayLastLap;
-
-            m_FlashTimer += dt;
-            if (m_FlashTimer > m_FlashThreshold)
+            if (m_GoFlashState)
             {
-                IO::ToggleActive();
-                m_FlashTimer = 0;
+                IO::SetLEDs(0);
+                m_GoFlashState = false;
+            }
+            else
+            {
+                IO::SetLEDs(255);
+                m_GoFlashState = true;
             }
         }
+    }
+    else
+    {
+        // add minutes onto the 7 segment display
+        uint8_t minutes = Clock::GetElapsedMinutes();
+        if (minutes < 10)
+            IO::SetPositionsToString(4, "0" + String(minutes));
+        else
+            IO::SetPositionsToString(4, String(minutes));
+
+        // add seconds onto the 7 segment display
+        uint8_t seconds = Clock::GetElapsedSeconds();
+        if (seconds < 10)
+            IO::SetPositionsToString(6, "0" + String(seconds));
+        else
+            IO::SetPositionsToString(6, String(seconds));
         
+        
+        IO::SetDisplayToString();
     }
 
     ServoIO::Write(180 * (1 - m_Car->GetSpeedNormalized()));

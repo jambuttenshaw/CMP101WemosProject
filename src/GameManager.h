@@ -17,7 +17,7 @@ public:
 
     void Init();
 
-    void SetClock() { m_LastFrameTime = millis(); }
+    void Countdown();
 
     void Update();
     void Draw();
@@ -33,11 +33,16 @@ private:
     Point m_CameraOffset;
 
     // bools to control the state of the game
-    bool m_MovedOff = false;
     bool m_PassedHalfway = false;
     bool m_DisplayingLastLapTime = false;
+    bool m_DisplayingGo = false;
 
     float m_DurationToDisplayLastLap = 4;
+    float m_LapTimeFlashThreshold = 0.3f;
+
+    float m_DurationToDisplayGo = 3;
+    float m_GoFlashThreshold = 0.1f;
+    int m_GoFlashState = true;
+
     float m_FlashTimer = 0;
-    float m_FlashThreshold = 0.3f;
 };
