@@ -9,6 +9,7 @@ public:
     static void Init()
     {
         s_Servo->attach(D3);
+        Write(180);
     }
 
     static void Write(int pos)
