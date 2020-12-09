@@ -56,7 +56,6 @@ void GameManager::Init()
     // the first 3 digits wont get overwritten
     IO::SetPositionsToString(0, "LAP 0000");
     IO::SetDisplayToString();
-
 }
 
 void GameManager::Update()

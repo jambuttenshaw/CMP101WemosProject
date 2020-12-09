@@ -17,6 +17,8 @@ public:
 
     void Init();
 
+    void SetClock() { m_LastFrameTime = millis(); }
+
     void Update();
     void Draw();
 private:
