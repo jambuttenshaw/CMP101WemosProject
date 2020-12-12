@@ -77,9 +77,9 @@ private:
     DrawMode m_DrawMode = DrawMode::Lines;
 
     // GEOMETRY OF THE TRACK
-    Point m_TrackVertices[150]; // an array of points that define the shape of the track
-    unsigned int m_TrackEdgeIndices[300]; // an array of indices that define how the points that make up the track should be joined together
-    unsigned int m_TrackAreaIndices[450]; // an array of indices that define the area that the track covers, for checking when the car is on or off the track
+    Point m_TrackVertices[76]; // an array of points that define the shape of the track
+    unsigned int m_TrackEdgeIndices[152]; // an array of indices that define how the points that make up the track should be joined together
+    unsigned int m_TrackAreaIndices[228]; // an array of indices that define the area that the track covers, for checking when the car is on or off the track
 
     // the centroid of the track
     Point m_TrackCentroid;
