@@ -103,6 +103,7 @@ void GameManager::Countdown()
     IO::SetLEDs(255);
     // place go on the last 2 7 seg displays
     IO::SetPositionsToString(6, "GO");
+    IO::SetDisplayToString();
     // flag that we want to display go
     m_DisplayingGo = true;
 
